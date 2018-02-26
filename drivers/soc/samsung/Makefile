@@ -89,3 +89,6 @@ obj-$(CONFIG_EXYNOS_PPMPU_FAIL_DETECTOR)	+= exynos-ppmpu.o
 
 # Exynos CPU Performance
 obj-$(CONFIG_EXYNOS_CPU_PERF)	+= exynos_cpu_perf/
+
+# state notifier
+obj-$(CONFIG_STATE_NOTIFIER)	+= state_notifier.o
