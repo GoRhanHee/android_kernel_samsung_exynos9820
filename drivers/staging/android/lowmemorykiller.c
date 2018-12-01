@@ -46,7 +46,7 @@
 
 static int lmkd_count;
 
-static u32 lowmem_debug_level = 1;
+static u32 lowmem_debug_level;
 static short lowmem_adj[6] = {
 	0,
 	1,
