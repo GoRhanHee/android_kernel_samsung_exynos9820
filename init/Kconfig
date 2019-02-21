@@ -16,8 +16,21 @@ config DEFCONFIG_LIST
 	default "$ARCH_DEFCONFIG"
 	default "arch/$ARCH/defconfig"
 
-config TOOLS_SUPPORT_RELR
-	bool "Declare tool support for RELR"
+config CC_HAS_WARN_MAYBE_UNINITIALIZED
+	def_bool $(cc-option,-Wmaybe-uninitialized)
+	help
+	  GCC >= 4.7 supports this option.
+
+config CC_DISABLE_WARN_MAYBE_UNINITIALIZED
+	bool
+	depends on CC_HAS_WARN_MAYBE_UNINITIALIZED
+	default CC_IS_GCC && GCC_VERSION < 40900  # unreliable for GCC < 4.9
+	help
+	  GCC s -Wmaybe-uninitialized is not reliable by definition.
+	  Lots of false positive warnings are produced in some cases.
+
+	  If this option is enabled, -Wno-maybe-uninitialzed is passed
+	  to the compiler to suppress maybe-uninitialized warnings.
 
 config CONSTRUCTORS
 	bool
@@ -61,8 +74,8 @@ config INIT_ENV_ARG_LIMIT
 config CROSS_COMPILE
 	string "Cross-compiler tool prefix"
 	help
-	  Same as running 'make CROSS_COMPILE=prefix-' but stored for
-	  default make runs in this kernel build directory.  You don't
+	  Same as running make CROSS_COMPILE=prefix- but stored for
+	  default make runs in this kernel build directory.  You dont
 	  need to set this unless you want the configured kernel build
 	  directory to select the cross-compiler automatically.
 
@@ -173,7 +186,7 @@ config KERNEL_LZMA
 	bool "LZMA"
 	depends on HAVE_KERNEL_LZMA
 	help
-	  This compression algorithm's ratio is best.  Decompression speed
+	  This compression algorithms ratio is best.  Decompression speed
 	  is between gzip and bzip2.  Compression is slowest.
 	  The kernel size is about 33% smaller with LZMA in comparison to gzip.
 
@@ -239,13 +252,13 @@ config SYSVIPC
 	  Inter Process Communication is a suite of library functions and
 	  system calls which let processes (running programs) synchronize and
 	  exchange information. It is generally considered to be a good thing,
-	  and some programs won't run unless you say Y here. In particular, if
-	  you want to run the DOS emulator dosemu under Linux (read the
+	  and some programs wont run unless you say Y here. In particular, if
+	  you want to run the DOS emulator dosemu under Linux (read) the
 	  DOSEMU-HOWTO, available from <http://www.tldp.org/docs.html#howto>),
-	  you'll need to say Y here.
+	  you ll need to say Y here.
 
 	  You can find documentation about IPC with "info ipc" and also in
-	  section 6.4 of the Linux Programmer's Guide, available from
+	  section 6.4 of the Linux Programmers Guide, available from
 	  <http://www.tldp.org/guides.html>.
 
 config SYSVIPC_SYSCTL
@@ -264,7 +277,7 @@ config POSIX_MQUEUE
 	  programs written e.g. for Solaris with use of its POSIX message
 	  queues (functions mq_*) say Y here.
 
-	  POSIX message queues are visible as a filesystem called 'mqueue'
+	  POSIX message queues are visible as a filesystem called mqueue
 	  and can be mounted somewhere if you want to do filesystem
 	  operations on message queues.
 
@@ -283,7 +296,7 @@ config CROSS_MEMORY_ATTACH
 	help
 	  Enabling this option adds the system calls process_vm_readv and
 	  process_vm_writev which allow a process with the correct privileges
-	  to directly read from or write to another process' address space.
+	  to directly read from or write to another process address space.
 	  See the man page for more details.
 
 config FHANDLE
@@ -433,7 +446,7 @@ config BSD_PROCESS_ACCT_V3
 	help
 	  If you say Y here, the process accounting information is written
 	  in a new file format that also logs the process IDs of each
-	  process and it's parent. Note that this file format is incompatible
+	  process and its parent. Note that this file format is incompatible
 	  with previous v0/v1/v2 file formats, so you will need updated tools
 	  for processing it. A preliminary version of these tools is available
 	  at <http://www.gnu.org/software/acct/>.
@@ -459,7 +472,7 @@ config TASK_DELAY_ACCT
 	help
 	  Collect information on time spent by a task waiting for system
 	  resources like cpu, synchronous block I/O completion and swapping
-	  in pages. Such statistics can help in setting a task's priorities
+	  in pages. Such statistics can help in setting a tasks priorities
 	  relative to other tasks for cpu, io, rss limits etc.
 
 	  Say N if unsure.
@@ -620,16 +633,16 @@ config PELT_UTIL_HALFLIFE_32
 config PELT_UTIL_HALFLIFE_16
 	bool "16 ms, suggested for interactive workloads"
 	help
-	  Use 16ms as PELT half-life value. This will increase the ramp-up and
+	  Use ms as PELT half-life value. This will increase the ramp-up and
 	  decay of utlization and load twice as fast as for the default
-	  configuration using 32ms.
+	  configuration using ms.
 
 config PELT_UTIL_HALFLIFE_8
 	bool "8 ms, very fast"
 	help
-	  Use 8ms as PELT half-life value. This will increase the ramp-up and
+	  Use ms as PELT half-life value. This will increase the ramp-up and
 	  decay of utlization and load four time as fast as for the default
-	  configuration using 32ms.
+	  configuration using ms.
 
 endchoice
 
@@ -1165,6 +1178,7 @@ config CC_OPTIMIZE_FOR_PERFORMANCE
 
 config CC_OPTIMIZE_FOR_SIZE
 	bool "Optimize for size"
+	imply CC_DISABLE_WARN_MAYBE_UNINITIALIZED  # avoid false positives
 	help
 	  Enabling this option will pass "-Os" instead of "-O2" to
 	  your compiler resulting in a smaller kernel.
