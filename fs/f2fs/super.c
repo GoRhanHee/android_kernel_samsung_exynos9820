@@ -3653,8 +3653,13 @@ try_onemore:
 	/* setup f2fs internal modules */
 	err = f2fs_build_segment_manager(sbi);
 	if (err) {
+<<<<<<< HEAD
 		f2fs_err(sbi, "Failed to initialize F2FS segment manager (%d)",
 			 err);
+=======
+		f2fs_msg(sb, KERN_ERR,
+			"Failed to initialize F2FS segment manager (%d)", err);
+>>>>>>> 46dc390d5714 (f2fs: add error prints for debugging mount failure)
 		goto free_sm;
 	}
 	err = f2fs_build_node_manager(sbi);
