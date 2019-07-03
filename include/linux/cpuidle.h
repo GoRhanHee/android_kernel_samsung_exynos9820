@@ -87,6 +87,7 @@ struct cpuidle_device {
 	unsigned int		use_deepest_state:1;
 	unsigned int		cpu;
 
+	int			last_state_idx;
 	int			last_residency;
 	int			first_idx;
 	struct cpuidle_state_usage	states_usage[CPUIDLE_STATE_MAX];
