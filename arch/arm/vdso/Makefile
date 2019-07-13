@@ -10,12 +10,11 @@ obj-vdso := $(addprefix $(obj)/, $(obj-vdso))
 ccflags-y := -fPIC -fno-common -fno-builtin -fno-stack-protector
 ccflags-y += -DDISABLE_BRANCH_PROFILING
 
-VDSO_LDFLAGS := -Wl,-Bsymbolic -Wl,--no-undefined -Wl,-soname=linux-vdso.so.1
-VDSO_LDFLAGS += -Wl,-z,max-page-size=4096 -Wl,-z,common-page-size=4096
-VDSO_LDFLAGS += -nostdlib -shared
-VDSO_LDFLAGS += $(call cc-ldoption, -Wl$(comma)--hash-style=sysv)
-VDSO_LDFLAGS += $(call cc-ldoption, -Wl$(comma)--build-id)
-VDSO_LDFLAGS += $(call cc-ldoption, -fuse-ld=bfd)
+ldflags-y = -Bsymbolic --no-undefined -soname=linux-vdso.so.1 \
+	    -z max-page-size=4096 -z common-page-size=4096 \
+	    -nostdlib -shared \
+	    --hash-style=sysv --build-id \
+	    -T
 
 obj-$(CONFIG_VDSO) += vdso.o
 extra-$(CONFIG_VDSO) += vdso.lds
