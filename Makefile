@@ -713,8 +713,28 @@ LDFLAGS		+= -plugin-opt=-data-sections
 # use llvm-ar for building symbol tables from IR files, and llvm-dis instead
 # of objdump for processing symbol versions and exports
 LLVM_AR		:= llvm-ar
-LLVM_DIS	:= llvm-dis
-export LLVM_AR LLVM_DIS
+LLVM_NM		:= llvm-nm
+export LLVM_AR LLVM_NM
+else ifdef CONFIG_LTO_GCC
+LDFLAGS_FINAL_vmlinux := -flto=jobserver -fuse-linker-plugin
+LDFLAGS_FINAL_vmlinux += $(filter -g%, $(KBUILD_CFLAGS))
+LDFLAGS_FINAL_vmlinux += -fno-fat-lto-objects
+LDFLAGS_FINAL_vmlinux += $(call cc-disable-warning,attribute-alias,)
+LDFLAGS_FINAL_vmlinux += -Xassembler -Idrivers/misc/tzdev
+ifdef CONFIG_LTO_DEBUG
+	LDFLAGS_FINAL_vmlinux += -fdump-ipa-cgraph -fdump-ipa-inline-details
+	# add for debugging compiler crashes:
+	# LDFLAGS_FINAL_vmlinux += -dH -save-temps
+endif
+ifdef CONFIG_LTO_CP_CLONE
+	LDFLAGS_FINAL_vmlinux += -fipa-cp-clone
+endif
+LDFLAGS_FINAL_vmlinux += -Wno-lto-type-mismatch -Wno-psabi
+LDFLAGS_FINAL_vmlinux += -Wno-stringop-overflow -flinker-output=nolto-rel
+
+LDFINAL_vmlinux := ${CONFIG_SHELL} ${srctree}/scripts/gcc-ld
+AR		:= $(CROSS_COMPILE)gcc-ar
+NM		:= $(CROSS_COMPILE)gcc-nm
 endif
 
 # According gcc docs when using computed gotos, disabling
@@ -746,6 +766,18 @@ KBUILD_CFLAGS	+= -O2 $(call cc-disable-warning,maybe-uninitialized,)
 else
 KBUILD_CFLAGS   += -O2
 endif
+endif
+
+#tweaks
+ifeq ($(cc-name),gcc)
+KBUILD_CFLAGS	+= -mcpu=cortex-a75.cortex-a55 -mtune=cortex-a75.cortex-a55 \
+                   -fgraphite-identity
+endif
+
+ifeq ($(cc-name),clang)
+KBUILD_CFLAGS   += -mtune=cortex-a75 \
+                   -mcpu=cortex-a75+crypto+crc+sha2+aes
+
 endif
 
 KBUILD_CFLAGS += $(call cc-ifversion, -lt, 0409, \
@@ -909,10 +941,16 @@ KBUILD_CFLAGS	+= $(call cc-option,-fdata-sections,)
 endif
 
 ifdef CONFIG_LTO_CLANG
-lto-clang-flags	:= -flto -fvisibility=hidden
+ifdef CONFIG_THINLTO
+lto-clang-flags	:= -flto=thin
+LDFLAGS		+= --thinlto-cache-dir=.thinlto-cache
+else
+lto-clang-flags	:= -flto
+endif
+lto-clang-flags += -fvisibility=default $(call cc-option, -fsplit-lto-unit)
 
 # allow disabling only clang LTO where needed
-DISABLE_LTO_CLANG := -fno-lto -fvisibility=default
+DISABLE_LTO_CLANG := -fno-lto
 export DISABLE_LTO_CLANG
 endif
 
