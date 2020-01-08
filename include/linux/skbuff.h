@@ -1353,6 +1353,11 @@ static inline void skb_zcopy_abort(struct sk_buff *skb)
 	}
 }
 
+/* Iterate through singly-linked GSO fragments of an skb. */
+#define skb_list_walk_safe(first, skb, next)                                   \
+	for ((skb) = (first), (next) = (skb) ? (skb)->next : NULL; (skb);      \
+	     (skb) = (next), (next) = (skb) ? (skb)->next : NULL)
+
 /**
  *	skb_queue_empty - check if a queue is empty
  *	@list: queue head
