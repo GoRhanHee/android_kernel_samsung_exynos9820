@@ -243,8 +243,6 @@ source "drivers/security/samsung/icdrv/Kconfig"
 
 source "drivers/samsung/Kconfig"
 
-source "drivers/kperfmon/Kconfig"
-
 source "drivers/security/samsung/tzic/Kconfig"
 
 source "drivers/spu_verify/Kconfig"
