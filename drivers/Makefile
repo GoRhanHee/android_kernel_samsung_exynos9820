@@ -236,8 +236,6 @@ obj-$(CONFIG_UH)		+= uh/
 #	obj-$(CONFIG_GATOR)				+= gator/
 #endif
 
-obj-y				+= kperfmon/
-
 obj-$(CONFIG_SEC_EXT)		+= samsung/
 
 #TZIC
