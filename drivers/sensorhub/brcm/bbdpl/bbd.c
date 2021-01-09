@@ -903,11 +903,11 @@ ssize_t bbd_urgent_patch_read(struct file *user_filp, char __user *buf, size_t s
 		} else
 			is_signed = true;
 
-			if (is_signed == false) {
-				pr_err("[SSPBBD] %s : urgent_patch is not signed", __func__);
-				kfree(urgent_buffer);
-				return 0;
-			}
+		if (is_signed == false) {
+			pr_err("[SSPBBD] %s : urgent_patch is not signed", __func__);
+			kfree(urgent_buffer);
+			return 0;
+		}
 
 			urgent_patch_size = ret;
 			pr_err("[SSPBBD] %s : total: %d  patch size: %d", __func__, fsize, urgent_patch_size);
