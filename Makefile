@@ -447,6 +447,7 @@ LINUXINCLUDE    := \
 
 KBUILD_AFLAGS   := -D__ASSEMBLY__ -march=armv8-a+lse
 KBUILD_CFLAGS   := -Wall -Wundef -Wno-trigraphs \
+                   -w \
 		   -fno-strict-aliasing -fno-common -fshort-wchar \
 		   -Wno-format-security \
 		   -Xassembler -march=armv8-a+lse \
