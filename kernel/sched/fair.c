@@ -5863,7 +5863,7 @@ static unsigned long __cpu_norm_util(unsigned long util, unsigned long capacity)
  *
  * Return: the (estimated) utilization for the specified CPU
  */
-static inline unsigned long cpu_util(int cpu)
+unsigned long cpu_util(int cpu)
 {
 	struct cfs_rq *cfs_rq;
 	unsigned int util;
