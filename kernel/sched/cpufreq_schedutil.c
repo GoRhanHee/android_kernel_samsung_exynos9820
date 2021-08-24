@@ -20,6 +20,8 @@
 
 #include <trace/events/power.h>
 
+#include <linux/battery_saver.h>
+
 #include "sched.h"
 #include "tune.h"
 #include "ems/ems.h"
