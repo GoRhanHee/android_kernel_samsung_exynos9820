@@ -6579,8 +6579,10 @@ schedtune_margin(unsigned long capacity, unsigned long signal, long boost)
 	 * The obtained M could be used by the caller to "boost" S.
 	 */
 	if (boost >= 0) {
-		margin  = capacity - signal;
-		margin *= boost;
+		if (capacity > signal) {
+			margin  = capacity - signal;
+			margin *= boost;
+		}
 	} else
 		margin = -signal * boost;
 
@@ -6609,15 +6611,13 @@ static inline long
 schedtune_task_margin(struct task_struct *task)
 {
 	int boost = schedtune_task_boost(task);
-	unsigned long util, capacity;
+	unsigned long util;
 
 	if (boost == 0)
 		return 0;
 
 	util = task_util_est(task);
-	capacity = capacity_orig_of(task_cpu(task));
-
-	return schedtune_margin(capacity, util, boost);
+	return schedtune_margin(SCHED_CAPACITY_SCALE, util, boost);
 }
 
 #else /* CONFIG_SCHED_TUNE */
