@@ -287,9 +287,14 @@ unsigned long ml_boosted_cpu_util(int cpu)
 
 	capacity = capacity_orig_of(cpu);
 
+#ifdef CONFIG_FREQVAR_TUNE
 	if (bg->group[STUNE_TOPAPP].tasks)
 		fv_boost = freqvar_st_boost_vector(cpu);
-
+#else
+	if (bg->group[STUNE_TOPAPP].tasks)
+		fv_boost = boost;
+#endif
+    
 	if (fv_boost > boost)
 		boost = fv_boost;
 
