@@ -111,7 +111,7 @@ config LOCALVERSION_AUTO
 
 config INLINE_OPTIMIZATION
 	bool "Optimize compiler inlining"
-	default n
+	default y
 	help
 	  Inlining functions in the hot-path can help improve performance,
 	  while also increasing the final size of the kernel image. Setting
