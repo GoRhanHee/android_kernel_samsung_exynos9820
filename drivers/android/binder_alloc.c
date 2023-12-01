@@ -276,8 +276,8 @@ static int binder_update_page_range(struct binder_alloc *alloc, int allocate,
 		/* vm_insert_page does not seem to increment the refcount */
 	}
 	if (mm) {
-		up_read(&mm->mmap_sem);
-		mmput(mm);
+		up_write(&mm->mmap_sem);
+		mmput_async(mm);
 	}
 	return 0;
 
@@ -309,8 +309,13 @@ err_page_ptr_cleared:
 	}
 err_no_vma:
 	if (mm) {
+<<<<<<< HEAD
 		up_read(&mm->mmap_sem);
 		mmput(mm);
+=======
+		up_write(&mm->mmap_sem);
+		mmput_async(mm);
+>>>>>>> 553b9fbf5d0d (binder: fix race between mmput() and do_exit())
 	}
 	return vma ? -ENOMEM : -ESRCH;
 }
