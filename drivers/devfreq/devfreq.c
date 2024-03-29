@@ -315,15 +315,10 @@ int update_devfreq(struct devfreq *devfreq)
 	if (!devfreq->governor)
 		return -EINVAL;
 
-	if (devfreq->max_boost) {
-		/* Use the max freq for max boosts */
-		freq = ULONG_MAX;
-	} else {
-		/* Reevaluate the proper frequency */
-		err = devfreq->governor->get_target_freq(devfreq, &freq);
-		if (err)
-			return err;
-	}
+	/* Reevaluate the proper frequency */
+	err = devfreq->governor->get_target_freq(devfreq, &freq);
+	if (err)
+		return err;
 
 #if defined(CONFIG_EXYNOS_DVFS_MANAGER) && defined(CONFIG_ARM_EXYNOS_DEVFREQ)
 	err = find_exynos_devfreq_dm_type(devfreq->dev.parent, &dm_type);
@@ -1154,29 +1149,7 @@ static ssize_t target_freq_show(struct device *dev,
 {
 	return sprintf(buf, "%lu\n", to_devfreq(dev)->previous_freq);
 }
-
-static ssize_t target_freq_store(struct device *dev,
-					  struct device_attribute *attr,
-					  const char *buf, size_t count)
-{
-	struct devfreq *devfreq = to_devfreq(dev);
-	unsigned int freq;
-	int ret;
-
-	if (!devfreq->governor)
-		return -EINVAL;
-
-	ret = sscanf(buf, "%u", &freq);
-	if (ret != 1)
-		return -EINVAL;
-
-	devfreq->previous_freq = freq;
-
-	ret = count;
-
-	return ret;
-}
-static DEVICE_ATTR_RW(target_freq);
+static DEVICE_ATTR_RO(target_freq);
 
 static ssize_t polling_interval_show(struct device *dev,
 				     struct device_attribute *attr, char *buf)
@@ -1215,39 +1188,8 @@ static ssize_t name##_show					\
 show_one(min_freq);
 show_one(max_freq);
 
-#define store_one(name)						\
-static ssize_t name##_store					\
-(struct device *dev, struct device_attribute *attr, const char *buf, size_t count)	\
-{								\
-	struct devfreq *devfreq = to_devfreq(dev);	\
-	unsigned int freq;	\
-	int ret;	\
-	\
-	if (!devfreq->governor)	\
-		return -EINVAL;	\
-	\
-	ret = sscanf(buf, "%u", &freq);	\
-	if (ret != 1)	\
-		return -EINVAL;	\
-	\
-	devfreq->name = freq; \
-	\
-	mutex_lock(&devfreq->lock);	\
-	ret = update_devfreq(devfreq);	\
-	mutex_unlock(&devfreq->lock);	\
-	\
-	if (ret && ret != -EAGAIN)	\
-		return ret;	\
-	\
-	ret = count;	\
-	\
-	return ret;	\
-}
-store_one(min_freq);
-store_one(max_freq);
-
-static DEVICE_ATTR_RW(min_freq);
-static DEVICE_ATTR_RW(max_freq);
+static DEVICE_ATTR_RO(min_freq);
+static DEVICE_ATTR_RO(max_freq);
 
 static ssize_t available_frequencies_show(struct device *d,
 					  struct device_attribute *attr,
