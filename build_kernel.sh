@@ -20,7 +20,10 @@ case "$MODEL" in
         ;;
     N976N )
         DEVICE="d2xks"
-        ;;        
+        ;;
+	N970F )
+		DEVICE="d1"
+		;;        
     * )
         echo "Check Your Model! EX)./build_kernel.sh G977N"
         exit 1
@@ -73,6 +76,9 @@ case "$MODEL" in
     N976N )
         echo "SRPSD23C002KU" > "$BOARD"
         ;;
+    N970F )
+        echo "SRPSD23C002KU" > "$BOARD"
+        ;;
 esac
 
 cd "$AIK_DIR"
@@ -92,7 +98,7 @@ case "$MODEL" in
   	--id=0x0 --rev=0x0 --custom0=0x0 --custom1=0x0 --custom2=0x0 --custom3=0x0 \
   	arch/arm64/boot/dts/exynos/exynos9820.dtb --custom0=0x00 --custom1=0xff --id=0x0 --rev=0x0 
         ;;
-    N971N | N976N )
+    N971N | N976N | N970F )
 	python3 mkdtboimg.py create dt.img \
   	--page_size=2048 \
   	--version=0 \
@@ -181,7 +187,18 @@ case "$MODEL" in
   	arch/arm64/boot/dts/samsung/exynos9820-d2x_kor_22.dtbo --custom0=0x16 --custom1=0x16 --id=0x0 --rev=0x0 \
   	arch/arm64/boot/dts/samsung/exynos9820-d2x_kor_23.dtbo --custom0=0x17 --custom1=0x17 --id=0x0 --rev=0x0 \
   	arch/arm64/boot/dts/samsung/exynos9820-d2x_kor_24.dtbo --custom0=0x18 --custom1=0xff --id=0x0 --rev=0x0
-        ;;        
+        ;;  
+	N970F )
+        python3 mkdtboimg.py create dtbo.img \
+  	--page_size=2048 \
+  	--version=0 \
+  	--id=0x0 --rev=0x0 --custom0=0x0 --custom1=0x0 --custom2=0x0 --custom3=0x0 \
+  	arch/arm64/boot/dts/samsung/exynos9820-d1_eur_open_18.dtbo --custom0=0x12 --custom1=0x12 --id=0x0 --rev=0x0 \
+  	arch/arm64/boot/dts/samsung/exynos9820-d1_eur_open_19.dtbo --custom0=0x13 --custom1=0x14 --id=0x0 --rev=0x0 \
+  	arch/arm64/boot/dts/samsung/exynos9820-d1_eur_open_21.dtbo --custom0=0x15 --custom1=0x15 --id=0x0 --rev=0x0 \
+  	arch/arm64/boot/dts/samsung/exynos9820-d1_eur_open_22.dtbo --custom0=0x16 --custom1=0x16 --id=0x0 --rev=0x0 \
+  	arch/arm64/boot/dts/samsung/exynos9820-d1_eur_open_23.dtbo --custom0=0x17 --custom1=0xff --id=0x0 --rev=0x0
+        ;;      
 esac
 mv "dtbo.img" "$OUT_DIR/dtbo.img"
 
