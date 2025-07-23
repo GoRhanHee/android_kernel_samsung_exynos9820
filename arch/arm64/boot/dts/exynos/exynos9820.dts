@@ -1,7 +1,7 @@
 /dts-v1/;
 
 / {
-	compatible = "samsung,armv8", "samsung,exynos9825";
+	compatible = "samsung,armv8", "samsung,exynos9820";
 	dtb-hw_rev = <0x0>;
 	dtb-hw_rev_end = <0xff>;
 	interrupt-parent = <0x1>;
@@ -5308,8 +5308,8 @@
 			vbmeta {
 				compatible = "android,vbmeta";
 				parts = "vbmeta,boot,recovery,system,vendor,product,dtb,dtbo,keystorage";
-			};
-			
+			};			
+					
 			fstab {
 				compatible = "android,fstab";
 
@@ -5339,7 +5339,7 @@
 					fsmgr_flags = "wait,verify,avb";
 					status = "okay";
 				};
-			};			
+			};
 		};
 	};
 
