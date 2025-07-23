@@ -1,10 +1,12 @@
 const char *npu_git_log_str =
+"d30abe12f fix compile error..\n"
 "f815b368d Fix npu generated\n"
 "824598f04 Kernel Source Upload\n"
 " 1 file changed, 0 insertions(+), 0 deletions(-) / Stash depth=0";
 const char *npu_git_hash_str =
+"d30abe12f1df5972ebd11a43bcd2bc7b14dddae0\n"
 "f815b368d34b6b6a5749efd26d7b0a892c3bd8bf\n"
 "824598f04a5cebbbecc986c5733c029e9a6a9938\n"
 " 1 file changed, 0 insertions(+), 0 deletions(-) / Stash depth=0";
 const char *npu_build_info =
-"test1@gorhanhee / Build on 2025-07-24 02:06:13+09:00";
+"test1@gorhanhee / Build on 2025-07-24 02:12:23+09:00";
