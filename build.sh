@@ -48,7 +48,7 @@ rm -rf $(pwd)/AIK/split_img/boot.img-kernel
 rm -rf $(pwd)/AIK/image-new.img
 
 make ARCH=arm64 -j16 O=${OUT_DIR} mrproper
-make ARCH=arm64 -j16 O=${OUT_DIR} ${DEVICE}_defconfig ramdisk.config || exit 1
+make ARCH=arm64 -j16 O=${OUT_DIR} exynos9820-${DEVICE}_defconfig ramdisk.config || exit 1
 make ARCH=arm64 -j16 O=${OUT_DIR} || exit 1
 
 # Make file
