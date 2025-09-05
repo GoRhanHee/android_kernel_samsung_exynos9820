@@ -1,3 +1,3 @@
-[submodule "samsung-exynos9820-toolchain"]
-	path = samsung-exynos9820-toolchain
+[submodule "toolchain"]
+	path = toolchain
 	url = https://github.com/CruelKernel/samsung-exynos9820-toolchain.git
