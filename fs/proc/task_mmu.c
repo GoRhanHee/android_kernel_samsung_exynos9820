@@ -24,6 +24,9 @@
 #include <linux/susfs_def.h>
 #endif
 
+#include <linux/io_record.h>
+#include <linux/freezer.h>
+
 #include <asm/elf.h>
 #include <asm/tlb.h>
 #include <asm/tlbflush.h>
