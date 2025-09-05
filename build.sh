@@ -56,7 +56,9 @@ rm -rf ${AIK_DIR}/split_img/boot.img-kernel
 rm -rf ${AIK_DIR}/AIK/split_img/boot.img-ramdisk.cpio.gz
 rm -rf ${AIK_DIR}/AIK/ramdisk/system/etc/ramdisk/build.prop
 rm -rf ${AIK_DIR}/AIK/image-new.img
+rm -rf ${AIK_DIR}/AIK/ramdisk-new.cpio.gz
 
+# Make Ramdisk file
 cp "$(pwd)/ramdisk_prop/${MODEL}.prop" "${AIK_DIR}/ramdisk/system/etc/ramdisk/build.prop"
 
 cd ${AIK_DIR}/ramdisk
@@ -64,11 +66,11 @@ find . | cpio -o -H newc | gzip > ../split_img/boot.img-ramdisk.cpio.gz
 
 cd "${LOCATION}"
 
+# Make file
 make ARCH=arm64 -j16 O=${OUT_DIR} mrproper
 make ARCH=arm64 -j16 O=${OUT_DIR} exynos9820-${DEVICE}_defconfig ramdisk.config || exit 1
 make ARCH=arm64 -j16 O=${OUT_DIR} || exit 1
 
-# Make file
 IMAGE="$(pwd)/out/arch/arm64/boot/Image"
 
 # Make boot.img file
