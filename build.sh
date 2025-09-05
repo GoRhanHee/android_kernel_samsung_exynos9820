@@ -27,6 +27,22 @@ case "$MODEL" in
         ;;
 esac
 
+# KSU
+read -p "Do you want to build ksu? (y/n): " ASK_KSU
+
+case "$ASK_KSU" in
+    [yY] )
+        KSU="true"
+        ;;
+    [nN] )
+        KSU="false"
+        ;;
+    * )
+        echo "Invalid answer. Please enter 'y' or 'n'."
+        exit 1
+        ;;
+esac
+
 LOCATION=$(pwd)
 
 # Compile Setting
@@ -68,7 +84,16 @@ cd "${LOCATION}"
 
 # Make file
 make ARCH=arm64 -j16 O=${OUT_DIR} mrproper
-make ARCH=arm64 -j16 O=${OUT_DIR} exynos9820-${DEVICE}_defconfig ramdisk.config || exit 1
+
+case "${KSU}" in
+    true )
+        make ARCH=arm64 -j16 O=${OUT_DIR} exynos9820-${DEVICE}_defconfig ramdisk.config ksu.config || exit 1
+        ;;
+    false )
+        make ARCH=arm64 -j16 O=${OUT_DIR} exynos9820-${DEVICE}_defconfig ramdisk.config || exit 1
+        ;;
+esac
+
 make ARCH=arm64 -j16 O=${OUT_DIR} || exit 1
 
 IMAGE="$(pwd)/out/arch/arm64/boot/Image"
@@ -210,4 +235,12 @@ mv "dtbo.img" "${GORHANHEE}/dtbo.img"
 
 # Make tar_file
 cd ${GORHANHEE}
-tar -cvf ${MODEL}_ramdisk.tar boot.img dt.img dtbo.img
+
+case "${KSU}" in
+    true )
+        tar -cvf ${MODEL}_SuSFS_amdisk.tar boot.img dt.img dtbo.img
+        ;;
+    false )
+        tar -cvf ${MODEL}_ramdisk.tar boot.img dt.img dtbo.img
+        ;;
+esac
