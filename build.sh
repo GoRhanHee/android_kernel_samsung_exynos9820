@@ -30,7 +30,7 @@ esac
 # KSU
 read -p "Do you want to build ksu? (y/n): " ASK_KSU
 
-case "$ASK_KSU" in
+case "${ASK_KSU}" in
     [yY] )
         KSU="true"
         ;;
@@ -69,10 +69,10 @@ fi
 AIK_DIR="$(pwd)/AIK"
 
 rm -rf ${AIK_DIR}/split_img/boot.img-kernel
-rm -rf ${AIK_DIR}/AIK/split_img/boot.img-ramdisk.cpio.gz
-rm -rf ${AIK_DIR}/AIK/ramdisk/system/etc/ramdisk/build.prop
-rm -rf ${AIK_DIR}/AIK/image-new.img
-rm -rf ${AIK_DIR}/AIK/ramdisk-new.cpio.gz
+rm -rf ${AIK_DIR}/split_img/boot.img-ramdisk.cpio.gz
+rm -rf ${AIK_DIR}/ramdisk/system/etc/ramdisk/build.prop
+rm -rf ${AIK_DIR}/image-new.img
+rm -rf ${AIK_DIR}/ramdisk-new.cpio.gz
 
 # Make Ramdisk file
 cp "$(pwd)/ramdisk_prop/${MODEL}.prop" "${AIK_DIR}/ramdisk/system/etc/ramdisk/build.prop"
@@ -238,9 +238,13 @@ cd ${GORHANHEE}
 
 case "${KSU}" in
     true )
-        tar -cvf ${MODEL}_SuSFS_amdisk.tar boot.img dt.img dtbo.img
+        tar -cvf ${MODEL}_SuSFS_ramdisk.tar boot.img dt.img dtbo.img
         ;;
     false )
         tar -cvf ${MODEL}_ramdisk.tar boot.img dt.img dtbo.img
         ;;
 esac
+
+rm -rf ${AIK_DIR}/split_img/boot.img-kernel
+rm -rf ${AIK_DIR}/split_img/boot.img-ramdisk.cpio.gz
+rm -rf ${AIK_DIR}/ramdisk-new.cpio.gz
