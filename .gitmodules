@@ -1,8 +1,7 @@
+[submodule "toolchain"]
+	path = toolchain
+	url = https://github.com/CruelKernel/samsung-exynos9820-toolchain.git
 [submodule "KernelSU-Next"]
 	path = KernelSU-Next
 	url = https://github.com/sidex15/KernelSU-Next.git
 	branch = next-susfs-experimental
-	
-[submodule "toolchain"]
-	path = toolchain
-	url = https://github.com/CruelKernel/samsung-exynos9820-toolchain.git

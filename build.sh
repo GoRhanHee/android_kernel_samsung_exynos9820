@@ -27,7 +27,7 @@ case "$MODEL" in
         ;;
 esac
 
-# KSU
+# KSU Build
 read -p "Do you want to build ksu? (y/n): " ASK_KSU
 
 case "${ASK_KSU}" in
@@ -49,12 +49,6 @@ LOCATION=$(pwd)
 export ARCH=arm64
 export PLATFORM_VERSION=12
 export ANDROID_MAJOR_VERSION=s
-export ARGS="
-ARCH=arm64
-CC=$(pwd)/toolchain/clang/host/linux-x86/clang-4639204-cfp-jopp/bin/clang
-CROSS_COMPILE=$(pwd)/toolchain/gcc-cfp/gcc-cfp-jopp-only/aarch64-linux-android-4.9/bin/aarch64-linux-android-
-CLANG_TRIPLE=$(pwd)/toolchain/clang/host/linux-x86/clang-4639204-cfp-jopp/bin/aarch64-linux-gnu-
-"
 
 OUT_DIR="$(pwd)/out"
 
@@ -89,18 +83,18 @@ find . | cpio -o -H newc | gzip > ../split_img/boot.img-ramdisk.cpio.gz
 cd "${LOCATION}"
 
 # Make file
-make ${ARGS} -j16 O=${OUT_DIR} mrproper
+make ARCH=arm64 -j16 O=${OUT_DIR} mrproper
 
 case "${KSU}" in
     true )
-        make ${ARGS} -j16 O=${OUT_DIR} exynos9820-${DEVICE}_defconfig ramdisk.config ksu.config || exit 1
+        make ARCH=arm64 -j16 O=${OUT_DIR} exynos9820-${DEVICE}_defconfig ramdisk.config ksu.config || exit 1
         ;;
     false )
-        make ${ARGS} -j16 O=${OUT_DIR} exynos9820-${DEVICE}_defconfig ramdisk.config || exit 1
+        make ARCH=arm64 -j16 O=${OUT_DIR} exynos9820-${DEVICE}_defconfig ramdisk.config || exit 1
         ;;
 esac
 
-make ${ARGS} -j16 O=${OUT_DIR} || exit 1
+make ARCH=arm64 -j16 O=${OUT_DIR} || exit 1
 
 IMAGE="$(pwd)/out/arch/arm64/boot/Image"
 
