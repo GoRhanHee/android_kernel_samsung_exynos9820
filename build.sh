@@ -49,6 +49,28 @@ LOCATION=$(pwd)
 export ARCH=arm64
 export PLATFORM_VERSION=12
 export ANDROID_MAJOR_VERSION=s
+export PATH="$(pwd)/toolchain/bin:$PATH"
+export LLVM=1
+export ARGS="
+CC=clang
+LD=ld.lld
+ARCH=arm64
+CROSS_COMPILE=aarch64-linux-gnu-
+CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+CLANG_TRIPLE=aarch64-linux-gnu-
+AR=llvm-ar
+NM=llvm-nm
+AS=llvm-as
+READELF=llvm-readelf
+OBJCOPY=llvm-objcopy
+OBJDUMP=llvm-objdump
+OBJSIZE=llvm-size
+STRIP=llvm-strip
+LLVM_AR=llvm-ar
+LLVM_DIS=llvm-dis
+LLVM_NM=llvm-nm
+LLVM=1
+"
 
 OUT_DIR="$(pwd)/out"
 
@@ -83,18 +105,18 @@ find . | cpio -o -H newc | gzip > ../split_img/boot.img-ramdisk.cpio.gz
 cd "${LOCATION}"
 
 # Make file
-make ARCH=arm64 -j16 O=${OUT_DIR} mrproper
+make ${ARGS} -j16 O=${OUT_DIR} mrproper
 
 case "${KSU}" in
     true )
-        make ARCH=arm64 -j16 O=${OUT_DIR} exynos9820-${DEVICE}_defconfig ramdisk.config ksu.config || exit 1
+        make ${ARGS} -j16 O=${OUT_DIR} exynos9820-${DEVICE}_defconfig ramdisk.config ksu.config || exit 1
         ;;
     false )
-        make ARCH=arm64 -j16 O=${OUT_DIR} exynos9820-${DEVICE}_defconfig ramdisk.config || exit 1
+        make ${ARGS} -j16 O=${OUT_DIR} exynos9820-${DEVICE}_defconfig ramdisk.config || exit 1
         ;;
 esac
 
-make ARCH=arm64 -j16 O=${OUT_DIR} || exit 1
+make ${ARGS} -j16 O=${OUT_DIR} || exit 1
 
 IMAGE="$(pwd)/out/arch/arm64/boot/Image"
 
