@@ -1,0 +1,23 @@
+####################################
+# from generate-common-build-props
+# These properties identify this partition image.
+####################################
+ro.product.bootimage.brand=samsung
+ro.product.bootimage.device=d2s
+ro.product.bootimage.manufacturer=samsung
+ro.product.bootimage.model=SM-N975F
+ro.product.bootimage.name=d2sxx
+ro.bootimage.build.date=Thu Aug 17 10:29:21 +07 2023
+ro.bootimage.build.date.utc=1692242961
+ro.bootimage.build.fingerprint=samsung/d2sxx/d2s:12/SP1A.210812.016/N975FXXS9HWHA:user/release-keys
+ro.bootimage.build.id=SP1A.210812.016
+ro.bootimage.build.tags=release-keys
+ro.bootimage.build.type=user
+ro.bootimage.build.version.incremental=N975FXXS9HWHA
+ro.bootimage.build.version.release=12
+ro.bootimage.build.version.release_or_codename=12
+ro.bootimage.build.version.sdk=31
+# Auto-added by post_process_props.py
+persist.sys.usb.config=mtp
+# end of file
+
