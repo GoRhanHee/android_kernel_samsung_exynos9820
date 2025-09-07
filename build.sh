@@ -131,7 +131,7 @@ case "${KSU}" in
         make ARCH=arm64 -j16 O=${OUT_DIR} exynos9820-${DEVICE}_defconfig gorhanhee.config ksu.config || exit 1
         ;;
     false )
-        make ARCH=arm64 -j16 O=${OUT_DIR} exynos9820-${DEVICE}_defconfig gorhanhee.config || exit 1
+        make ARCH=arm64 -j16 O=${OUT_DIR} exynos9820-${DEVICE}_defconfig gorhanhee.config not_ksu.config || exit 1
         ;;
 esac
 
