@@ -111,6 +111,14 @@ rm -rf ${AIK_DIR}/ramdisk-new.cpio.gz
 cp "$(pwd)/early_setting/ramdisk_prop/${MODEL}.prop" "${AIK_DIR}/ramdisk/system/etc/ramdisk/build.prop"
 
 cd ${AIK_DIR}/ramdisk
+
+mkdir debug_ramdisk
+mkdir dev
+mkdir metadata
+mkdir mnt
+mkdir second_stage_resources
+mkdir sys
+
 find . | cpio -o -H newc | gzip > ../split_img/boot.img-ramdisk.cpio.gz
 
 cd "${LOCATION}"
@@ -394,10 +402,10 @@ cd ${GORHANHEE}
 
 case "${KSU}" in
     true )
-        tar -cvf ODIN_${MODEL}_SUSFS_ramdisk.tar boot.img dt.img dtbo.img
+        tar -cvf ${MODEL}_Odin_SUSFS.tar boot.img dt.img dtbo.img
         ;;
     false )
-        tar -cvf ODIN_${MODEL}_ramdisk.tar boot.img dt.img dtbo.img
+        tar -cvf ${MODEL}_Odin_ramdisk.tar boot.img dt.img dtbo.img
         ;;
 esac
 
@@ -409,10 +417,10 @@ cd ${GORHANHEE}
 
 case "${KSU}" in
     true )
-        zip -r TWRP_${MODEL}_SUSFS_ramdisk.zip META-INF boot.img dt.img dtbo.img
+        zip -r ${MODEL}_TWRP_SUSFS.zip META-INF boot.img dt.img dtbo.img
         ;;
     false )
-        zip -r TWRP_${MODEL}_ramdisk.zip META-INF boot.img dt.img dtbo.img
+        zip -r ${MODEL}_TWRP_ramdisk.zip META-INF boot.img dt.img dtbo.img
         ;;
 esac
 
