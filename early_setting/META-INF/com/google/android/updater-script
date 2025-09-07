@@ -1,0 +1,10 @@
+ui_print(" ");
+ui_print("Installing GoRhanHee_Kernel for Galaxy S/N10 Series");
+ui_print(" ");
+
+package_extract_file("boot.img", "/dev/block/by-name/boot");
+package_extract_file("dt.img", "/dev/block/by-name/dtb");
+package_extract_file("dtbo.img", "/dev/block/by-name/dtbo");
+
+ui_print("Installation done!");
+ui_print(" ");

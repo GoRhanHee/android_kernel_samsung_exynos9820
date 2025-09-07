@@ -389,15 +389,30 @@ case "${MODEL}" in
 esac
 mv "dtbo.img" "${GORHANHEE}/dtbo.img"
 
-# Make tar_file
+# Make tar_file for Odin
 cd ${GORHANHEE}
 
 case "${KSU}" in
     true )
-        tar -cvf ${MODEL}_SuSFS_ramdisk.tar boot.img dt.img dtbo.img
+        tar -cvf ODIN_${MODEL}_SUSFS_ramdisk.tar boot.img dt.img dtbo.img
         ;;
     false )
-        tar -cvf ${MODEL}_ramdisk.tar boot.img dt.img dtbo.img
+        tar -cvf ODIN_${MODEL}_ramdisk.tar boot.img dt.img dtbo.img
+        ;;
+esac
+
+# Make zip_file for TWRP
+cd "${LOCATION}"
+cp -ar "$(pwd)/early_setting/META-INF" "${GORHANHEE}/META-INF"
+
+cd ${GORHANHEE}
+
+case "${KSU}" in
+    true )
+        zip -r TWRP_${MODEL}_SUSFS_ramdisk.zip META-INF boot.img dt.img dtbo.img
+        ;;
+    false )
+        zip -r TWRP_${MODEL}_ramdisk.zip META-INF boot.img dt.img dtbo.img
         ;;
 esac
 
