@@ -54,6 +54,23 @@ read -p "Do you want to build ksu? (y/n): " ASK_KSU
 case "${ASK_KSU}" in
     [yY] )
         KSU="true"
+		echo "KernelSU-Next = n / Wild_KSU = w / SukiSU-Ultra = s "
+		read -p "What kind of ksu do you want? (n/w/s): " CHOOSE_KSU
+		case "${CHOOSE_KSU}" in
+			[nN] )
+				PICK_KSU="next"
+				;;		
+			[wW] )
+				PICK_KSU="wild"
+				;;
+			[sS] )
+				PICK_KSU="suki"
+				;;						
+    		* )
+        		echo "Invalid answer. Please enter 'n' or 'w' or 's'."
+        		exit 1
+        		;;
+		esac										
         ;;
     [nN] )
         KSU="false"
@@ -65,6 +82,29 @@ case "${ASK_KSU}" in
 esac
 
 LOCATION=$(pwd)
+
+# Setting KernelSU
+if [ "${KSU}" = "true" ]; then
+	if [ -d "KernelSU-Next" ]; then
+    	rm -rf "${LOCATION}/KernelSU-Next"
+	elif [ -d "Wild_KSU" ]; then
+    	rm -rf "${LOCATION}/Wild_KSU"
+	elif [ -d "KernelSU" ]; then
+    	rm -rf "${LOCATION}/KernelSU"		
+	fi	
+fi
+
+if [ "$KSU" = "true" ]; then
+	if [ "${PICK_KSU}" = "next" ]; then
+    	curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash - || exit 1
+		rm -rf "${LOCATION}/KernelSU-Next"
+		git clone -b next-susfs-experimental https://github.com/sidex15/KernelSU-Next.git
+	elif [ "${PICK_KSU}" = "wild" ]; then
+    	curl -LSs "https://raw.githubusercontent.com/GoRhanHee/Wild_KSU/wild/kernel/setup.sh" | bash - || exit 1
+	elif [ "${PICK_KSU}" = "suki" ]; then
+    	curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s susfs-main  || exit 1
+	fi	
+fi
 
 # tzdev
 rm -rf "${LOCATION}/drivers/misc/tzdev"
@@ -140,7 +180,16 @@ make ARCH=arm64 -j16 O=${OUT_DIR} || exit 1
 IMAGE="$(pwd)/out/arch/arm64/boot/Image"
 
 # Make boot.img file
-cp "${IMAGE}" "${AIK_DIR}/split_img/boot.img-kernel"
+if [ "${PICK_KSU}" = "suki" ]; then
+	cp "${IMAGE}" "${AIK_DIR}/"
+	cd "${AIK_DIR}"
+	./patch_linux || exit 1
+	mv "oImage" "$(pwd)/split_img/boot.img-kernel"
+	rm -rf "Image"
+	cd "${LOCATION}"
+else	
+	cp "${IMAGE}" "${AIK_DIR}/split_img/boot.img-kernel"
+fi	
 
 BOARD="${AIK_DIR}/split_img/boot.img-board"
 case "$MODEL" in
@@ -402,7 +451,17 @@ cd ${GORHANHEE}
 
 case "${KSU}" in
     true )
-        tar -cvf ${MODEL}_Odin_SUSFS.tar boot.img dt.img dtbo.img
+		case "${PICK_KSU}" in
+			next )
+				tar -cvf ${MODEL}_Odin_NEXT_SUSFS.tar boot.img dt.img dtbo.img
+				;;		
+			wild )
+				tar -cvf ${MODEL}_Odin_WILD_SUSFS.tar boot.img dt.img dtbo.img
+				;;
+			suki )
+				tar -cvf ${MODEL}_Odin_SUKI_SUSFS.tar boot.img dt.img dtbo.img
+				;;						
+		esac										
         ;;
     false )
         tar -cvf ${MODEL}_Odin_ramdisk.tar boot.img dt.img dtbo.img
@@ -417,7 +476,17 @@ cd ${GORHANHEE}
 
 case "${KSU}" in
     true )
-        zip -r ${MODEL}_TWRP_SUSFS.zip META-INF boot.img dt.img dtbo.img
+		case "${PICK_KSU}" in
+			next )
+				zip -r ${MODEL}_TWRP_NEXT_SUSFS.zip META-INF boot.img dt.img dtbo.img
+				;;		
+			wild )
+				zip -r ${MODEL}_TWRP_WILD_SUSFS.zip META-INF boot.img dt.img dtbo.img
+				;;
+			suki )
+				zip -r ${MODEL}_TWRP_SUKI_SUSFS.zip META-INF boot.img dt.img dtbo.img
+				;;						
+		esac
         ;;
     false )
         zip -r ${MODEL}_TWRP_ramdisk.zip META-INF boot.img dt.img dtbo.img
