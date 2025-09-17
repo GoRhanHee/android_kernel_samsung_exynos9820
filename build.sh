@@ -96,9 +96,7 @@ fi
 
 if [ "$KSU" = "true" ]; then
 	if [ "${PICK_KSU}" = "next" ]; then
-    	curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash - || exit 1
-		rm -rf "${LOCATION}/KernelSU-Next"
-		git clone -b next-susfs-experimental https://github.com/sidex15/KernelSU-Next.git
+    	curl -LSs "https://raw.githubusercontent.com/GoRhanHee/KernelSU-Next/next-susfs-experimental/kernel/setup.sh" | bash - || exit 1
 	elif [ "${PICK_KSU}" = "wild" ]; then
     	curl -LSs "https://raw.githubusercontent.com/GoRhanHee/Wild_KSU/wild/kernel/setup.sh" | bash - || exit 1
 	elif [ "${PICK_KSU}" = "suki" ]; then
