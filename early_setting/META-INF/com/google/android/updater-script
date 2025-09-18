@@ -1,10 +1,16 @@
-ui_print(" ");
-ui_print("Installing GoRhanHee_Kernel for Galaxy S/N10 Series");
-ui_print(" ");
+ui_print " "
+ui_print "*******************************"
+ui_print "*    - GoRhanHee Kernel -     *"
+ui_print "*       TWRP Installer        *"
+ui_print "*       by @GoRhanHee         *"
+ui_print "*******************************"
 
+ui_print "[+] Installing boot.img..."
 package_extract_file("boot.img", "/dev/block/by-name/boot");
+ui_print "[+] Installing dt.img..."
 package_extract_file("dt.img", "/dev/block/by-name/dtb");
+ui_print "[+] Installing dtbo.img..."
 package_extract_file("dtbo.img", "/dev/block/by-name/dtbo");
 
-ui_print("Installation done!");
+ui_print("Installation Completed Go to Reboot!");
 ui_print(" ");
