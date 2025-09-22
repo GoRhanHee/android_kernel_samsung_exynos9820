@@ -84,15 +84,15 @@ esac
 LOCATION=$(pwd)
 
 # Setting KernelSU
-if [ "${KSU}" = "true" ]; then
-	if [ -d "KernelSU-Next" ]; then
-    	rm -rf "${LOCATION}/KernelSU-Next"
-	elif [ -d "Wild_KSU" ]; then
-    	rm -rf "${LOCATION}/Wild_KSU"
-	elif [ -d "KernelSU" ]; then
-    	rm -rf "${LOCATION}/KernelSU"		
-	fi	
-fi
+if [ -d "KernelSU-Next" ]; then
+    rm -rf "${LOCATION}/KernelSU-Next"
+elif [ -d "Wild_KSU" ]; then
+    rm -rf "${LOCATION}/Wild_KSU"
+elif [ -d "KernelSU" ]; then
+    rm -rf "${LOCATION}/KernelSU"		
+fi	
+
+cp "${LOCATION}/early_setting/ksu_not_ksu/${KSU}_Kconfig" "${LOCATION}/drivers/Kconfig"
 
 if [ "$KSU" = "true" ]; then
 	if [ "${PICK_KSU}" = "next" ]; then
