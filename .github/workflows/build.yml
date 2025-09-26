@@ -58,7 +58,8 @@ jobs:
           build-essential git libssl-dev bc flex bison \
           libncurses5-dev libncurses-dev cpio zip unzip \
           python3 curl rsync kmod libelf-dev libtinfo5 \
-          wget lz4 tar openssl
+          wget lz4 tar openssl python3-pip libncurses5 \
+          gcc clang curl 
 
     - name: 3. setting permission
       run: chmod +x build.sh
