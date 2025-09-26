@@ -59,7 +59,7 @@ jobs:
           libncurses5-dev libncurses-dev cpio zip unzip \
           python3 curl rsync kmod libelf-dev libtinfo6 \
           wget lz4 tar openssl python3-pip libncurses6 \
-          gcc clang curl python2
+          gcc clang curl
 
     - name: 3. setting permission
       run: chmod +x build.sh
