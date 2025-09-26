@@ -57,8 +57,9 @@ jobs:
         sudo apt-get install -y \
           build-essential git libssl-dev bc flex bison \
           libncurses5-dev libncurses-dev cpio zip unzip \
-          python3 curl rsync kmod libelf-dev libtinfo6 \
-          wget lz4 tar openssl python3-pip libncurses6 \
+          python3 curl rsync kmod libelf-dev \
+          lz4 tar openssl python3-pip \
+          wget http://security.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2ubuntu0.1_amd64.deb && sudo dpkg -i libtinfo5_6.3-2ubuntu0.1_amd64.deb
           gcc clang curl
 
     - name: 3. setting permission
