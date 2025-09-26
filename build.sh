@@ -162,18 +162,18 @@ find . | cpio -o -H newc | gzip > ../split_img/boot.img-ramdisk.cpio.gz
 cd "${LOCATION}"
 
 # Make file
-make ARCH=arm64 -j16 O=${OUT_DIR} mrproper
+make ARCH=arm64 -j32 O=${OUT_DIR} mrproper
 
 case "${KSU}" in
     true )
-        make ARCH=arm64 -j16 O=${OUT_DIR} exynos9820-${DEVICE}_defconfig gorhanhee.config ksu.config || exit 1
+        make ARCH=arm64 -j32 O=${OUT_DIR} exynos9820-${DEVICE}_defconfig gorhanhee.config ksu.config || exit 1
         ;;
     false )
-        make ARCH=arm64 -j16 O=${OUT_DIR} exynos9820-${DEVICE}_defconfig gorhanhee.config not_ksu.config || exit 1
+        make ARCH=arm64 -j32 O=${OUT_DIR} exynos9820-${DEVICE}_defconfig gorhanhee.config not_ksu.config || exit 1
         ;;
 esac
 
-make ARCH=arm64 -j16 O=${OUT_DIR} || exit 1
+make ARCH=arm64 -j32 O=${OUT_DIR} || exit 1
 
 IMAGE="$(pwd)/out/arch/arm64/boot/Image"
 
