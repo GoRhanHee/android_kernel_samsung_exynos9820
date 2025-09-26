@@ -57,7 +57,8 @@ jobs:
         sudo apt-get install -y \
           build-essential git libssl-dev bc flex bison \
           libncurses5-dev libncurses-dev cpio zip unzip \
-          python3 curl rsync kmod libelf-dev      
+          python3 curl rsync kmod libelf-dev libtinfo5 \
+          wget lz4 tar openssl
 
     - name: 3. setting permission
       run: chmod +x build.sh
