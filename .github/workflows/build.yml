@@ -23,7 +23,7 @@ on:
           - N976N
       
       ASK_KSU:
-        description: 'Do you want to build KernelSu?'
+        description: 'Do you want to build KernelSU?'
         required: true
         type: choice
         default: 'y'
@@ -81,10 +81,13 @@ jobs:
         echo "Starting build for ${{ github.event.inputs.MODEL }} without KernelSU"
         echo "${{ github.event.inputs.ASK_KSU }}" | ./build.sh "${{ github.event.inputs.MODEL }}"
         
-    - name: 6. Upload Artifacts
+    - name: 6. Upload Artifacts TWRP Installer
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ github.event.inputs.MODEL }}-Kernel-Build
-        path: |
-          gorhanhee/*.zip
-          gorhanhee/*.tar        
+        name: ${{ github.event.inputs.MODEL }}_TWRP
+        path: gorhanhee/*.zip  
+    - name: 7. Upload Artifacts Odin Installer
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ github.event.inputs.MODEL }}_Odin
+        path: gorhanhee/*.tar   
