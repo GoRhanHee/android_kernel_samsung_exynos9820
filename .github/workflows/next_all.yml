@@ -1,13 +1,14 @@
-name: Kernel Build (Ramdisk) 
+name: Kernel All Build (Next_SuSFS) 
 
 on:
   workflow_dispatch:
-    inputs:
-      MODEL:
-        description: 'Choose Your Device'
-        required: true
-        type: choice
-        options:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false 
+      matrix:
+        model:
           - G970F
           - G970N
           - G973F
@@ -20,10 +21,8 @@ on:
           - N971N
           - N975F
           - N976B
-          - N976N
+          - N976N    
 
-jobs:
-  build:
     runs-on: ubuntu-latest 
 
     steps:
@@ -48,16 +47,17 @@ jobs:
 
     - name: 4. kernel build
       run: |
-        echo "Starting build for ${{ github.event.inputs.MODEL }}_Kernel File"
+        echo "Starting build for ${{ matrix.model }}_Kernel File"
         
         {
+          echo "y"
           echo "n"
-        } | ./build.sh "${{ github.event.inputs.MODEL }}"
+        } | ./build.sh "${{ matrix.model }}"
         
     - name: 5. Upload Artifacts Kernel File
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ github.event.inputs.MODEL }}_Ramdisk
+        name: ${{ matrix.model }}_NEXT_SuSFS
         path: |
           gorhanhee/*.zip  
           gorhanhee/*.tar   
