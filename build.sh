@@ -150,13 +150,6 @@ cp "$(pwd)/early_setting/ramdisk_prop/${MODEL}.prop" "${AIK_DIR}/ramdisk/system/
 
 cd ${AIK_DIR}/ramdisk
 
-mkdir debug_ramdisk
-mkdir dev
-mkdir metadata
-mkdir mnt
-mkdir second_stage_resources
-mkdir sys
-
 find . | cpio -o -H newc | gzip > ../split_img/boot.img-ramdisk.cpio.gz
 
 cd "${LOCATION}"

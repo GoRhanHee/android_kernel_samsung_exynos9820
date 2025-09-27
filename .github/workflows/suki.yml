@@ -1,0 +1,64 @@
+name: Kernel Build (SukiSU_SuSFS) 
+
+on:
+  workflow_dispatch:
+    inputs:
+      MODEL:
+        description: 'Choose Your Device'
+        required: true
+        type: choice
+        options:
+          - G970F
+          - G970N
+          - G973F
+          - G973N
+          - G975F
+          - G975N
+          - G977B
+          - G977N
+          - N970F
+          - N971N
+          - N975F
+          - N976B
+          - N976N
+
+jobs:
+  build:
+    runs-on: ubuntu-latest 
+
+    steps:
+    - name: 1. import kernel source
+      uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'     
+      
+    - name: 2. install package
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential git libssl-dev bc flex bison \
+          libncurses5-dev libncurses-dev cpio zip unzip \
+          python3 curl rsync kmod libelf-dev \
+          lz4 tar openssl python3-pip \
+          gcc clang
+        wget http://security.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2ubuntu0.1_amd64.deb && sudo dpkg -i libtinfo5_6.3-2ubuntu0.1_amd64.deb   
+
+    - name: 3. setting permission
+      run: chmod +x build.sh
+
+    - name: 4. kernel build
+      run: |
+        echo "Starting build for ${{ github.event.inputs.MODEL }}_Kernel File"
+        
+        {
+          echo "y"
+          echo "s"
+        } | ./build.sh "${{ github.event.inputs.MODEL }}"
+        
+    - name: 5. Upload Artifacts Kernel File
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ github.event.inputs.MODEL }}_SukiSU_SuSFS
+        path: |
+          gorhanhee/*.zip  
+          gorhanhee/*.tar   
