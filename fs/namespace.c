@@ -1382,10 +1382,10 @@ vfs_kern_mount(struct file_system_type *type, int flags, const char *name, void 
 		mnt = susfs_alloc_sus_vfsmnt(name);
 		goto bypass_orig_flow;
 	}
-	mnt = alloc_vfsmnt(name, false, 0);
+orig_flow:
+	mnt = alloc_vfsmnt(name);
 bypass_orig_flow:
 #else
-orig_flow:
 	mnt = alloc_vfsmnt(name);
 #endif
 	if (!mnt)
@@ -1472,10 +1472,10 @@ static struct mount *clone_mnt(struct mount *old, struct dentry *root,
 		mnt = susfs_alloc_sus_vfsmnt(old->mnt_devname);
 		goto bypass_orig_flow;
 	}
-	mnt = alloc_vfsmnt(old->mnt_devname, false, 0);
+orig_flow:
+	mnt = alloc_vfsmnt(old->mnt_devname);
 bypass_orig_flow:
 #else
-orig_flow:
 	mnt = alloc_vfsmnt(old->mnt_devname);
 #endif
 	if (!mnt)
