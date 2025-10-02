@@ -54,20 +54,17 @@ read -p "Do you want to build ksu? (y/n): " ASK_KSU
 case "${ASK_KSU}" in
     [yY] )
         KSU="true"
-		echo "KernelSU-Next = n / Wild_KSU = w / SukiSU-Ultra = s "
-		read -p "What kind of ksu do you want? (n/w/s): " CHOOSE_KSU
+		echo "KernelSU-Next = n / SukiSU-Ultra = s "
+		read -p "What kind of ksu do you want? (n/s): " CHOOSE_KSU
 		case "${CHOOSE_KSU}" in
 			[nN] )
 				PICK_KSU="next"
 				;;		
-			[wW] )
-				PICK_KSU="wild"
-				;;
 			[sS] )
 				PICK_KSU="suki"
 				;;						
     		* )
-        		echo "Invalid answer. Please enter 'n' or 'w' or 's'."
+        		echo "Invalid answer. Please enter 'n' or 's'."
         		exit 1
         		;;
 		esac										
@@ -86,8 +83,6 @@ LOCATION=$(pwd)
 # Setting KernelSU
 if [ -d "KernelSU-Next" ]; then
     rm -rf "${LOCATION}/KernelSU-Next"
-elif [ -d "Wild_KSU" ]; then
-    rm -rf "${LOCATION}/Wild_KSU"
 elif [ -d "KernelSU" ]; then
     rm -rf "${LOCATION}/KernelSU"		
 fi	
@@ -97,8 +92,6 @@ cp "${LOCATION}/early_setting/ksu_not_ksu/${KSU}_Kconfig" "${LOCATION}/drivers/K
 if [ "$KSU" = "true" ]; then
 	if [ "${PICK_KSU}" = "next" ]; then
     	curl -LSs "https://raw.githubusercontent.com/GoRhanHee/KernelSU-Next/next-susfs-experimental/kernel/setup.sh" | bash - || exit 1
-	elif [ "${PICK_KSU}" = "wild" ]; then
-    	curl -LSs "https://raw.githubusercontent.com/GoRhanHee/Wild_KSU/wild/kernel/setup.sh" | bash - || exit 1
 	elif [ "${PICK_KSU}" = "suki" ]; then
     	curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s susfs-main  || exit 1
 	fi	
@@ -446,9 +439,6 @@ case "${KSU}" in
 			next )
 				tar -cvf ${MODEL}_Odin_NEXT_SUSFS.tar boot.img dt.img dtbo.img
 				;;		
-			wild )
-				tar -cvf ${MODEL}_Odin_WILD_SUSFS.tar boot.img dt.img dtbo.img
-				;;
 			suki )
 				tar -cvf ${MODEL}_Odin_SUKI_SUSFS.tar boot.img dt.img dtbo.img
 				;;						
@@ -471,9 +461,6 @@ case "${KSU}" in
 			next )
 				zip -r ${MODEL}_TWRP_NEXT_SUSFS.zip META-INF boot.img dt.img dtbo.img
 				;;		
-			wild )
-				zip -r ${MODEL}_TWRP_WILD_SUSFS.zip META-INF boot.img dt.img dtbo.img
-				;;
 			suki )
 				zip -r ${MODEL}_TWRP_SUKI_SUSFS.zip META-INF boot.img dt.img dtbo.img
 				;;						
