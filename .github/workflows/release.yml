@@ -1,0 +1,54 @@
+name: Create Release from Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: 'Run ID'
+        required: true
+      tag_name:
+        description: 'tag'
+        required: true
+
+jobs:
+  release-from-artifact:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - name: Download artifacts from build run
+        uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ github.event.inputs.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: release-assets
+
+      - name: Check for existing release
+        id: check_release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view ${{ github.event.inputs.tag_name }} &> /dev/null; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create New GitHub Release
+        if: steps.check_release.outputs.exists == 'false'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag_name }}
+          name: Release ${{ github.event.inputs.tag_name }}
+          body: |
+            Build Run ID: ${{ github.event.inputs.run_id }}
+          files: release-assets/**/*
+
+      - name: Add files to existing release
+        if: steps.check_release.outputs.exists == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "Release for tag ${{ github.event.inputs.tag_name }} already exists. Adding files to it."
+          gh release upload ${{ github.event.inputs.tag_name }} release-assets/**/* --clobber
