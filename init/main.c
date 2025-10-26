@@ -420,6 +420,19 @@ static inline void setup_nr_cpu_ids(void) { }
 static inline void smp_prepare_cpus(unsigned int maxcpus) { }
 #endif
 
+static void remove_flag(char *cmd, const char *flag)
+{
+	char *start_addr, *end_addr;
+	/* Ensure all instances of a flag are removed */
+	while ((start_addr = strstr(cmd, flag))) {
+		end_addr = strchr(start_addr, ' ');
+		if (end_addr)
+			memmove(start_addr, end_addr + 1, strlen(end_addr));
+		else
+			*(start_addr - 1) = '\0';
+	}
+}
+
 /*
  * We need to store the untouched command line for future reference.
  * We also need to store the touched command line since the parameter
@@ -428,6 +441,15 @@ static inline void smp_prepare_cpus(unsigned int maxcpus) { }
  */
 static void __init setup_command_line(char *command_line)
 {
+	// magisk removes skip_initramfs from kernel
+	// so skip_initramfs won't be removed from cmdline
+	// and magisk will use SARInit which renders
+	// the device unbootable so we have to 'hide'
+	// skip_initramfs string
+	char skip_initramfs[] = "skip!initramfs";
+	skip_initramfs[4] = '_';
+	remove_flag(command_line, skip_initramfs);
+		
 	saved_command_line =
 		memblock_virt_alloc(strlen(boot_command_line) + 1, 0);
 #if defined(CONFIG_SEC_DEBUG_HIDING)

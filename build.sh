@@ -87,6 +87,15 @@ AIK_DIR="$(pwd)/AIK"
 
 rm -rf ${AIK_DIR}/split_img/boot.img-kernel
 rm -rf ${AIK_DIR}/image-new.img
+rm -rf ${AIK_DIR}/split_img/boot.img-ramdisk.cpio.gz
+rm -rf ${AIK_DIR}/ramdisk/system/etc/ramdisk/build.prop
+rm -rf ${AIK_DIR}/ramdisk-new.cpio.gz
+
+# Make Ramdisk file
+cp "$(pwd)/early_setting/ramdisk_prop/${MODEL}.prop" "${AIK_DIR}/ramdisk/system/etc/ramdisk/build.prop"
+cd ${AIK_DIR}/ramdisk
+find . | cpio -o -H newc | gzip > ../split_img/boot.img-ramdisk.cpio.gz
+cd "${LOCATION}"
 
 # Make file
 make ARCH=arm64 -j32 O=${OUT_DIR} mrproper
