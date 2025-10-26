@@ -1,0 +1,4 @@
+split_img/boot.img-kernel
+split_img/boot.img-ramdisk.cpio.gz
+ramdisk-new.cpio.gz
+image-new.img
