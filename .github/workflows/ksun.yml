@@ -1,14 +1,13 @@
-name: Kernel All Build (Ramdisk) 
+name: Kernel Build
 
 on:
   workflow_dispatch:
-
-jobs:
-  build:
-    strategy:
-      fail-fast: false 
-      matrix:
-        model:
+    inputs:
+      MODEL:
+        description: 'Choose Your Device'
+        required: true
+        type: choice
+        options:
           - G970F
           - G970N
           - G973F
@@ -21,15 +20,17 @@ jobs:
           - N971N
           - N975F
           - N976B
-          - N976N    
+          - N976N
 
+jobs:
+  build:
     runs-on: ubuntu-latest 
 
     steps:
-    - name: 1. import kernel source
-      uses: actions/checkout@v4     
+    - name: Import Kernel Source
+      uses: actions/checkout@v4   
       
-    - name: 2. install package
+    - name: Install package
       run: |
         sudo apt-get update
         sudo apt-get install -y \
@@ -40,19 +41,26 @@ jobs:
           gcc clang
         wget http://security.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2ubuntu0.1_amd64.deb && sudo dpkg -i libtinfo5_6.3-2ubuntu0.1_amd64.deb   
 
-    - name: 3. setting permission
+    - name: Setting permission
       run: chmod +x build.sh
 
-    - name: 4. kernel build
+    - name: Kernel build
       run: |
         echo "Starting build for ${{ github.event.inputs.MODEL }}_Kernel File"
     
         ./build.sh "${{ github.event.inputs.MODEL }}"
         
-    - name: 5. Upload Artifacts Kernel File
+    - name: Upload Artifacts Flashable File
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.model }}_Ramdisk
+        name: ${{ github.event.inputs.MODEL }}_KernelSU-Next
         path: |
           gorhanhee/*.zip  
           gorhanhee/*.tar   
+
+    - name: Upload Artifacts Kernel OUTPUT File
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ github.event.inputs.MODEL }}_Kernel_OUTPUT
+        path: |
+          ./out/** 
