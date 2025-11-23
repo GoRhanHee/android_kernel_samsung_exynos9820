@@ -45,14 +45,14 @@ jobs:
 
     - name: Kernel build
       run: |
-        echo "Starting build for ${{ github.event.inputs.MODEL }}_Kernel File"
+        echo "Starting build for ${{ matrix.model }}_Kernel File"
     
-        ./build.sh "${{ github.event.inputs.MODEL }}"
+        ./build.sh "${{ matrix.model }}"
         
     - name: Upload Artifacts Flashable File
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ github.event.inputs.MODEL }}_KernelSU-Next
+        name: ${{ matrix.model }}_KernelSU-Next
         path: |
           gorhanhee/*.zip  
           gorhanhee/*.tar   
@@ -60,6 +60,6 @@ jobs:
     - name: Upload Artifacts Kernel OUTPUT File
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ github.event.inputs.MODEL }}_Kernel_OUTPUT
+        name: ${{ matrix.model }}_Kernel_OUTPUT
         path: |
           ./out/** 
