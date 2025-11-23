@@ -62,6 +62,19 @@ case "${MODEL}" in
         ;;            
 esac
 
+# submodule
+git submodule init && git submodule update --remote
+
+# Setting toolchain
+TOOLCHAIN_URL="https://github.com/GoRhanHee/exynos9820_toolchain/releases/download/toolchain/toolchain.tar.xz"
+TOOLCHAIN_FILE=$(basename "$TOOLCHAIN_URL")
+
+if [ ! -f "$TOOLCHAIN_FILE" ]; then
+    wget -q --show-progress -O "$TOOLCHAIN_FILE" "$TOOLCHAIN_URL"
+fi
+
+tar -xf "$TOOLCHAIN_FILE" && rm "$TOOLCHAIN_FILE"
+
 # Compile Setting (OEM Option)
 export ARCH=arm64
 export PLATFORM_VERSION=12
