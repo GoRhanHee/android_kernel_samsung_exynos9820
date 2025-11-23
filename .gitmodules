@@ -1,3 +1,6 @@
 [submodule "toolchain"]
 	path = toolchain
 	url = https://github.com/GoRhanHee/exynos9820_toolchain.git
+[submodule "KernelSU-Next"]
+	path = KernelSU-Next
+	url = https://github.com/GoRhanHee/KernelSU-Next.git
