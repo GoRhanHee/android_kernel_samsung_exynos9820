@@ -43,7 +43,7 @@ jobs:
           name: Release ${{ github.event.inputs.tag_name }}
           body: |
             Build Run ID: ${{ github.event.inputs.run_id }}
-          files: release-assets/**/*
+          files: release-assets/**/*_KernelSU-Next
 
       - name: Add files to existing release
         if: steps.check_release.outputs.exists == 'true'
