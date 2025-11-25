@@ -379,7 +379,7 @@ mv "dtbo.img" "${GORHANHEE}/dtbo.img"
 # Make tar_file for Odin
 cd ${GORHANHEE}
 
-tar -cvf ${MODEL}_Odin_ramdisk.tar boot.img dt.img dtbo.img
+tar -cvf ${MODEL}_Odin_KernelSU_Next.tar boot.img dt.img dtbo.img
 
 # Make zip_file for TWRP
 cd "${LOCATION}"
@@ -387,7 +387,7 @@ cp -ar "$(pwd)/early_setting/META-INF" "${GORHANHEE}/META-INF"
 
 cd ${GORHANHEE}
 
-zip -r ${MODEL}_TWRP_ramdisk.zip META-INF boot.img dt.img dtbo.img
+zip -r ${MODEL}_TWRP_KernelSU_Next.zip META-INF boot.img dt.img dtbo.img
 
 rm -rf ${AIK_DIR}/split_img/boot.img-kernel
 rm -rf ${AIK_DIR}/split_img/boot.img-ramdisk.cpio.gz
