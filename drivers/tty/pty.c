@@ -715,7 +715,7 @@ static struct tty_struct *pts_unix98_lookup(struct tty_driver *driver,
 		struct file *file, int idx)
 {
 	struct tty_struct *tty;
-
+	
 	mutex_lock(&devpts_mutex);
 	tty = devpts_get_priv(file->f_path.dentry);
 	mutex_unlock(&devpts_mutex);
