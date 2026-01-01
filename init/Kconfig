@@ -17,9 +17,11 @@ config DEFCONFIG_LIST
 	default "arch/$ARCH/defconfig"
 
 config CC_HAS_WARN_MAYBE_UNINITIALIZED
-	def_bool $(cc-option,-Wmaybe-uninitialized)
-	help
-	  GCC >= 4.7 supports this option.
+    bool
+    default y if CC_IS_GCC && GCC_VERSION >= 40700
+    default y if CC_IS_CLANG
+    help
+      GCC >= 4.7 supports this option.
 
 config CC_DISABLE_WARN_MAYBE_UNINITIALIZED
 	bool
