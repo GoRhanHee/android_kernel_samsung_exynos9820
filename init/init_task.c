@@ -10,7 +10,6 @@
 #include <linux/fs.h>
 #include <linux/mm.h>
 #include <linux/task_integrity.h>
-#include <linux/scs.h>
 
 #include <asm/pgtable.h>
 #include <linux/uaccess.h>
@@ -25,13 +24,6 @@ static struct task_integrity init_integrity =
 /* Initial task structure */
 struct task_struct init_task = INIT_TASK(init_task);
 EXPORT_SYMBOL(init_task);
-
-#ifdef CONFIG_SHADOW_CALL_STACK
-unsigned long init_shadow_call_stack[SCS_SIZE / sizeof(long)] __init_task_data
-		__aligned(SCS_SIZE) = {
-	[(SCS_SIZE / sizeof(long)) - 1] = SCS_END_MAGIC
-};
-#endif
 
 /*
  * Initial thread structure. Alignment of this is handled by a special
