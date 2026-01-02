@@ -2,7 +2,14 @@ name: Kernel Build
 
 on:
   workflow_dispatch:
-
+    inputs:
+      KSU:
+        description: 'Do you want to include KernelSU?'
+        required: true
+        type: choice
+        options:
+          - y
+          - n
 jobs:
   build:
     strategy:
@@ -31,7 +38,7 @@ jobs:
         chmod -R +x prebuilts/    
 
     - name: Cooking Kernel
-      run: ./build.sh ${{ matrix.device }}
+      run: ./build.sh ${{ matrix.device }} ${{ github.event.inputs.KSU }}
 
     - name : Upload flashable file
       uses: actions/upload-artifact@v4

@@ -5,6 +5,7 @@ git submodule init && git submodule update --remote
 
 # Compiling Setting
 export MODEL=$1
+export KSU=$2
 export ANDROID_BUILD_TOP=$(pwd)
 export AIK_DIR=${ANDROID_BUILD_TOP}/prebuilts/AIK
 export OUT_DIR=${ANDROID_BUILD_TOP}/out
@@ -110,7 +111,11 @@ ARCH=arm64 \
 -j16 \
 O=out
 "
-make ${MAKE_ARGS} exynos9820-${MODEL}_defconfig ${SOC}.config || exit 1
+if [ "${KSU}" == "y" ]; then
+    make ${MAKE_ARGS} exynos9820-${MODEL}_defconfig ${SOC}.config kernelsu.config || exit 1
+else
+    make ${MAKE_ARGS} exynos9820-${MODEL}_defconfig ${SOC}.config || exit 1
+fi    
 make ${MAKE_ARGS} || exit 1
 
 # Cooking Ramdisk
@@ -134,4 +139,8 @@ mv ${AIK_DIR}/image-new.img ${ANDROID_BUILD_TOP}/prebuilts/boot.img
 
 # Cooking flashable zip file
 cd ${ANDROID_BUILD_TOP}/prebuilts
-zip -r ${SOC}_${MODEL}_Kernel.zip META-INF boot.img dt.img dtbo.img
+if [ "${KSU}" == "y" ]; then
+    zip -r ${SOC}_${MODEL}_KernelSU.zip META-INF boot.img dt.img dtbo.img
+else
+    zip -r ${SOC}_${MODEL}_Kernel.zip META-INF boot.img dt.img dtbo.img
+fi 
