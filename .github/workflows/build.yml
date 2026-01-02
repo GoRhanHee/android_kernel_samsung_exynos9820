@@ -5,6 +5,9 @@ on:
 
 jobs:
   build:
+    strategy:
+      matrix:
+        device: [beyond0lte, beyond0lteks, beyond1lte, beyond1lteks, beyond2lte, beyond2lteks, beyondx, beyondxks, d1, d1xks, d2s, d2x, d2xks]
     runs-on: ubuntu-latest 
 
     steps:
@@ -23,7 +26,17 @@ jobs:
         wget http://security.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2ubuntu0.1_amd64.deb && sudo dpkg -i libtinfo5_6.3-2ubuntu0.1_amd64.deb   
 
     - name: Setting permission
-      run: chmod +x build.sh
+      run: |    
+        chmod +x build.sh
+        chmod -R +x prebuilts/    
 
     - name: Cooking Kernel
-      run: ./build.sh
+      run: ./build.sh ${{ matrix.device }}
+
+    - name : Upload flashable file
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.device }}_Kernel_File
+        path: |
+          prebuilts/*.zip    
+          prebuilts/*.img

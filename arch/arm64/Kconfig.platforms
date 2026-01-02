@@ -321,6 +321,10 @@ config SOC_EXYNOS9820
 	select PINCTRL
 	select SAMSUNG_DMADEV
 
+config SOC_EXYNOS9825
+	bool "Samsung EXYNOS9825 AUX"
+	depends on SOC_EXYNOS9820
+
 config SOC_EXYNOS9820_EVT0
 	default n
 	bool "Samsung EXYNOS9820 EVT0"
@@ -332,6 +336,71 @@ config ARCH_EXYNOS9
 	help
 	  Samsung EXYNOS9 (Meercat/Ananke) SoC based systems
 
+config MODEL_BEYOND0LTE
+	bool "Samsung Galaxy S10e"
+	depends on SOC_EXYNOS9820
+	default n
+
+config MODEL_BEYOND0LTEKS
+	bool "Samsung Galaxy S10e (Korean)"
+	depends on SOC_EXYNOS9820
+	default n
+
+config MODEL_BEYOND1LTE
+	bool "Samsung Galaxy S10"
+	depends on SOC_EXYNOS9820
+	default n
+
+config MODEL_BEYOND1LTEKS
+	bool "Samsung Galaxy S10 (Korean)"
+	depends on SOC_EXYNOS9820
+	default n
+
+config MODEL_BEYOND2LTE
+	bool "Samsung Galaxy S10+"
+	depends on SOC_EXYNOS9820
+	default n
+
+config MODEL_BEYOND2LTEKS
+	bool "Samsung Galaxy S10+ (Korean)"
+	depends on SOC_EXYNOS9820
+	default n
+
+config MODEL_BEYONDX
+	bool "Samsung Galaxy S10 5G"
+	depends on SOC_EXYNOS9820
+	default n
+
+config MODEL_BEYONDXKS
+	bool "Samsung Galaxy S10 5G (Korean)"
+	depends on SOC_EXYNOS9820
+	default n
+
+config MODEL_D1
+	bool "Samsung Galaxy Note 10"
+	depends on SOC_EXYNOS9825
+	default n
+
+config MODEL_D1XKS
+	bool "Samsung Galaxy Note 10 5G (Korean)"
+	depends on SOC_EXYNOS9825
+	default n
+
+config MODEL_D2S
+	bool "Samsung Galaxy Note 10+"
+	depends on SOC_EXYNOS9825
+	default n
+
+config MODEL_D2X
+	bool "Samsung Galaxy Note 10+ 5G"
+	depends on SOC_EXYNOS9825
+	default n
+
+config MODEL_D2XKS
+	bool "Samsung Galaxy Note 10+ 5G (Korean)"
+	depends on SOC_EXYNOS9825
+	default n
+	
 config ANDROID_SYSTEM_AS_ROOT
 	bool "Enable Android System As Root"
 	default n
