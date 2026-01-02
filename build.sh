@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# submodule
+git submodule init && git submodule update --remote
+
 # Compiling Setting
 export MODEL=$1
 export ANDROID_BUILD_TOP=$(pwd)
