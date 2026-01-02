@@ -19,5 +19,5 @@ ARCH=arm64 \
 O=out
 "
 
-make ${MAKE_ARGS} exynos9820-beyond1lteks_defconfig || exit 1
+make ${MAKE_ARGS} exynos9820-beyond1lteks_defconfig gorhanhee.config || exit 1
 make ${MAKE_ARGS} || exit 1
