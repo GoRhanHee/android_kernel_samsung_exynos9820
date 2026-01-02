@@ -97,16 +97,16 @@ dtbo-$(CONFIG_MODEL_D1XKS) += samsung/exynos9820-d1x_kor_23.dtbo
 dtbo-$(CONFIG_MODEL_D1XKS) += samsung/exynos9820-d1x_kor_18.dtbo
 
 # d2s
-dtbo-$(CONFIG_MODEL_D2S) += samsung/exynos9820-d2s_eur_open_02.dtbo
-dtbo-$(CONFIG_MODEL_D2S) += samsung/exynos9820-d2s_eur_open_18.dtbo
-dtbo-$(CONFIG_MODEL_D2S) += samsung/exynos9820-d2s_eur_open_22.dtbo
-dtbo-$(CONFIG_MODEL_D2S) += samsung/exynos9820-d2s_eur_open_24.dtbo
-dtbo-$(CONFIG_MODEL_D2S) += samsung/exynos9820-d2s_eur_open_23.dtbo
-dtbo-$(CONFIG_MODEL_D2S) += samsung/exynos9820-d2s_eur_open_19.dtbo
-dtbo-$(CONFIG_MODEL_D2S) += samsung/exynos9820-d2s_eur_open_21.dtbo
-dtbo-$(CONFIG_MODEL_D2S) += samsung/exynos9820-d2s_eur_open_17.dtbo
-dtbo-$(CONFIG_MODEL_D2S) += samsung/exynos9820-d2s_eur_open_16.dtbo
-dtbo-$(CONFIG_MODEL_D2S) += samsung/exynos9820-d2s_eur_open_20.dtbo
+dtbo-$(CONFIG_MODEL_D2S) += samsung/exynos9820-d2_eur_open_02.dtbo
+dtbo-$(CONFIG_MODEL_D2S) += samsung/exynos9820-d2_eur_open_18.dtbo
+dtbo-$(CONFIG_MODEL_D2S) += samsung/exynos9820-d2_eur_open_22.dtbo
+dtbo-$(CONFIG_MODEL_D2S) += samsung/exynos9820-d2_eur_open_24.dtbo
+dtbo-$(CONFIG_MODEL_D2S) += samsung/exynos9820-d2_eur_open_23.dtbo
+dtbo-$(CONFIG_MODEL_D2S) += samsung/exynos9820-d2_eur_open_19.dtbo
+dtbo-$(CONFIG_MODEL_D2S) += samsung/exynos9820-d2_eur_open_21.dtbo
+dtbo-$(CONFIG_MODEL_D2S) += samsung/exynos9820-d2_eur_open_17.dtbo
+dtbo-$(CONFIG_MODEL_D2S) += samsung/exynos9820-d2_eur_open_16.dtbo
+dtbo-$(CONFIG_MODEL_D2S) += samsung/exynos9820-d2_eur_open_20.dtbo
 
 # d2x
 dtbo-$(CONFIG_MODEL_D2X) += samsung/exynos9820-d2x_eur_open_22.dtbo
