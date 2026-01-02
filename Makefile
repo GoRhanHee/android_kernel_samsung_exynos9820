@@ -928,11 +928,11 @@ export DISABLE_LTO_CLANG
 endif
 
 ifdef CONFIG_LTO
-LTO_CFLAGS	:= $(lto-clang-flags)
-KBUILD_CFLAGS	+= $(LTO_CFLAGS)
+lto-flags	:= $(lto-clang-flags)
+KBUILD_CFLAGS	+= $(lto-flags)
 
 DISABLE_LTO	:= $(DISABLE_LTO_CLANG)
-export LTO_CFLAGS DISABLE_LTO
+export DISABLE_LTO
 
 # LDFINAL_vmlinux and LDFLAGS_FINAL_vmlinux can be set to override
 # the linker and flags for vmlinux_link.
@@ -958,12 +958,12 @@ endif
 
 ifdef CONFIG_CFI
 # cfi-flags are re-tested in prepare-compiler-check
-CFI_CFLAGS	:= $(cfi-clang-flags)
-KBUILD_CFLAGS	+= $(CFI_CFLAGS)
+cfi-flags	:= $(cfi-clang-flags)
+KBUILD_CFLAGS	+= $(cfi-flags)
 
 DISABLE_CFI	:= $(DISABLE_CFI_CLANG)
 DISABLE_LTO	+= $(DISABLE_CFI)
-export CFI_CFLAGS DISABLE_CFI
+export DISABLE_CFI
 endif
 
 ifdef CONFIG_SHADOW_CALL_STACK
