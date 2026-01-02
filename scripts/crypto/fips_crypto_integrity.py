@@ -33,17 +33,16 @@ module_name = "crypto"
 if __name__ == "__main__":
     #print("python version:\n{}\n".format(sys.version))
 
-    if len(sys.argv) != 3:
-        print("Usage " + sys.argv[0] + " elf_file readelf_path")
+    if len(sys.argv) != 2:
+        print("Usage " + sys.argv[0] + " elf_file")
         sys.exit(-1)
 
     elf_file = os.path.abspath(sys.argv[1])
-    readelf_path = os.path.abspath(sys.argv[2])
-    modules = sys.argv[3:]
+    modules = sys.argv[2:]
 
     utils = Utils()
     utils.paths_exists([elf_file])
 
-    integrity = IntegrityRoutine(elf_file, readelf_path)
+    integrity = IntegrityRoutine(elf_file)
     integrity.make_integrity(sec_sym=sec_sym, module_name=module_name, debug=False, print_reloc_addrs=False,
                              sort_by="address", reverse=False)
