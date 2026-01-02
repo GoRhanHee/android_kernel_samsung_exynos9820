@@ -80,7 +80,7 @@ echo -n "${BOARD}" > "${AIK_DIR}/split_img/boot.img-board"
 
 # Add Specific Device DEFCONFIG
 export MODEL_UPPER=$(echo "${MODEL}" | tr '[:lower:]' '[:upper:]')
-echo -e "CONFIG_MODEL_${MODEL_UPPER}=y" >> "${ANDROID_BUILD_TOP}/arch/arm64/configs/${SOC}.config"
+echo -e "\nCONFIG_MODEL_${MODEL_UPPER}=y" >> "${ANDROID_BUILD_TOP}/arch/arm64/configs/${SOC}.config"
 
 # Setting tzdev drvier
 # All Galaxy S10 Series and Korean Note 10 Series use new tzdev drvier, but Global Note 10 Series uses old tzdev drvier
