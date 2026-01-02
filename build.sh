@@ -124,7 +124,7 @@ cd ${ANDROID_BUILD_TOP}
 mv ${AIK_DIR}/image-new.img ${ANDROID_BUILD_TOP}/prebuilts/boot.img
 
 # Cooking dt.img
-./prebuilts/mkdtimg cfg_create prebuilts/dt.img prebuilts/dtconfigs/${SOC}.cfg -d ${OUT_DIR}/arch/arm64/boot/dts/samsung
+./prebuilts/mkdtimg cfg_create prebuilts/dtb.img prebuilts/dtconfigs/${SOC}.cfg -d ${OUT_DIR}/arch/arm64/boot/dts/samsung
 
 # Cooking dtbo.img
 ./prebuilts/mkdtimg cfg_create prebuilts/dtbo.img prebuilts/dtconfigs/${MODEL}.cfg -d ${OUT_DIR}/arch/arm64/boot/dts/samsung
