@@ -1273,22 +1273,6 @@ else
 endif
 endif
 
-# Disable clang-specific config options when using a different compiler
-clang-specific-configs := LTO_CLANG CFI_CLANG SHADOW_CALL_STACK INIT_STACK_ALL_ZERO
-
-PHONY += check-clang-specific-options
-check-clang-specific-options: $(KCONFIG_CONFIG) FORCE
-ifneq ($(cc-name),clang)
-ifneq ($(findstring y,$(shell $(CONFIG_SHELL) \
-	$(srctree)/scripts/config --file $(KCONFIG_CONFIG) \
-		$(foreach c,$(clang-specific-configs),-s $(c)))),)
-	@echo WARNING: Disabling clang-specific options with $(cc-name) >&2
-	$(Q)$(srctree)/scripts/config --file $(KCONFIG_CONFIG) \
-		$(foreach c,$(clang-specific-configs),-d $(c)) && \
-	$(MAKE) -f $(srctree)/Makefile olddefconfig
-endif
-endif
-
 # Check for CONFIG flags that require compiler support. Abort the build
 # after .config has been processed, but before the kernel build starts.
 #
