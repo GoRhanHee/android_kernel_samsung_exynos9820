@@ -4,14 +4,14 @@
 git submodule init && git submodule update --remote
 
 # Compiling Setting
-export MODEL=$1
+export DEVICE=$1
 export KSU=$2
 export ANDROID_BUILD_TOP=$(pwd)
 export AIK_DIR=${ANDROID_BUILD_TOP}/prebuilts/AIK
 export OUT_DIR=${ANDROID_BUILD_TOP}/out
 
 # Define specific variables
-case ${MODEL} in
+case ${DEVICE} in
 beyond0lte)
     BOARD=SRPRI28A016KU
     SOC=exynos9820
@@ -83,8 +83,7 @@ esac
 echo -n "${BOARD}" > "${AIK_DIR}/split_img/boot.img-board"
 
 # Add Specific Device DEFCONFIG
-export MODEL_UPPER=$(echo "${MODEL}" | tr '[:lower:]' '[:upper:]')
-echo -e "\nCONFIG_MODEL_${MODEL_UPPER}=y" >> "${ANDROID_BUILD_TOP}/arch/arm64/configs/${SOC}.config"
+echo -e "\nCONFIG_DEVICE_${DEVICE^^}=y" >> "${ANDROID_BUILD_TOP}/arch/arm64/configs/${SOC}.config"
 
 # Setting tzdev drvier
 # All Galaxy S10 Series and Korean Note 10 Series use new tzdev drvier, but Global Note 10 Series uses old tzdev drvier
@@ -112,7 +111,7 @@ ARCH=arm64 \
 O=out
 "
 
-DEFCONFIG="exynos9820-${MODEL}_defconfig ${SOC}.config"
+DEFCONFIG="exynos9820-${DEVICE}_defconfig ${SOC}.config"
 
 if [ "${KSU}" == "y" ]; then
     CONFIGS="${DEFCONFIG} kernelsu.config"
@@ -124,7 +123,7 @@ make ${MAKE_ARGS} ${CONFIGS} || exit 1
 make ${MAKE_ARGS} || exit 1
 
 # Cooking Ramdisk
-cp ${ANDROID_BUILD_TOP}/prebuilts/ramdisk_prop/${MODEL}.prop ${AIK_DIR}/ramdisk/system/etc/ramdisk/build.prop
+cp ${ANDROID_BUILD_TOP}/prebuilts/ramdisk_prop/${DEVICE}.prop ${AIK_DIR}/ramdisk/system/etc/ramdisk/build.prop
 cd ${AIK_DIR}/ramdisk
 find . | cpio -o -H newc | gzip > ../split_img/boot.img-ramdisk.cpio.gz
 
@@ -140,12 +139,12 @@ mv ${AIK_DIR}/image-new.img ${ANDROID_BUILD_TOP}/prebuilts/boot.img
 ./prebuilts/mkdtimg cfg_create prebuilts/dt.img prebuilts/dtconfigs/${SOC}.cfg -d ${OUT_DIR}/arch/arm64/boot/dts/exynos
 
 # Cooking dtbo.img
-./prebuilts/mkdtimg cfg_create prebuilts/dtbo.img prebuilts/dtconfigs/${MODEL}.cfg -d ${OUT_DIR}/arch/arm64/boot/dts/samsung
+./prebuilts/mkdtimg cfg_create prebuilts/dtbo.img prebuilts/dtconfigs/${DEVICE}.cfg -d ${OUT_DIR}/arch/arm64/boot/dts/samsung
 
-# Cooking flashable zip file
+# Cooking flashable tar file
 cd ${ANDROID_BUILD_TOP}/prebuilts
 if [ "${KSU}" == "y" ]; then
-    zip -r ${SOC}_${MODEL}_KernelSU.zip META-INF boot.img dt.img dtbo.img
+    tar -cvf "${DEVICE}_KernelSU_Kernel_File.tar" boot.img dt.img dtbo.img 
 else
-    zip -r ${SOC}_${MODEL}_Kernel.zip META-INF boot.img dt.img dtbo.img
+    tar -cvf "${DEVICE}_Ramdisk_Kernel_File.tar" boot.img dt.img dtbo.img 
 fi 

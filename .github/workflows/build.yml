@@ -45,12 +45,4 @@ jobs:
       with:
         name: ${{ matrix.device }}_Kernel_File
         path: |
-          prebuilts/*.zip    
-          prebuilts/*.img
-
-    - name : Upload Output file
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ matrix.device }}_Kernel_OUTPUT_File
-        path: |
-          out/*
+          prebuilts/*.tar
