@@ -1,4 +1,4 @@
-name: Kernel Build
+name: Samsung Exynos9820 Kernel Build
 
 on:
   workflow_dispatch:
