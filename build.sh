@@ -111,11 +111,16 @@ ARCH=arm64 \
 -j16 \
 O=out
 "
+
+DEFCONFIG="exynos9820-${MODEL}_defconfig ${SOC}.config"
+
 if [ "${KSU}" == "y" ]; then
-    make ${MAKE_ARGS} exynos9820-${MODEL}_defconfig ${SOC}.config kernelsu.config || exit 1
+    CONFIGS="${DEFCONFIG} kernelsu.config"
 else
-    make ${MAKE_ARGS} exynos9820-${MODEL}_defconfig ${SOC}.config || exit 1
-fi    
+    CONFIGS="${DEFCONFIG}"
+fi
+
+make ${MAKE_ARGS} ${CONFIGS} || exit 1
 make ${MAKE_ARGS} || exit 1
 
 # Cooking Ramdisk
