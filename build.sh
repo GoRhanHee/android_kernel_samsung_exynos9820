@@ -124,6 +124,11 @@ LLVM=1 \
 LLVM_IAS=1 \
 ARCH=arm64 \
 -j16 \
+CC=clang \
+LD=ld.lld \
+CROSS_COMPILE=aarch64-linux-gnu- \
+CROSS_COMPILE_ARM32=arm-linux-gnueabi- \
+CLANG_TRIPLE=aarch64-linux-gnu- \
 O=out
 "
 
