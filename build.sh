@@ -100,6 +100,11 @@ export ANDROID_MAJOR_VERSION=s
 CLANG_DIR=$PWD/toolchain/neutron_18
 PATH=$CLANG_DIR/bin:$PATH
 
+# Symlinking python2
+if [ ! -f "$HOME/python" ]; then
+    ln -s /usr/bin/python2.7 "$HOME/python"
+fi 
+
 # Check if toolchain exists
 if [ ! -f "$CLANG_DIR/bin/clang-18" ]; then
     echo "-----------------------------------------------"
