@@ -172,7 +172,7 @@ static int __init vdso_mappings_init(const char *name,
 	struct page **vdso_pagelist;
 	unsigned long pfn;
 
-	if (memcmp(code_start, "\177ELF", 4)) {
+	if (memcmp(vdso_start, "\177ELF", 1)) {
 		pr_err("vDSO is not a valid ELF object!\n");
 		return -EINVAL;
 	}
