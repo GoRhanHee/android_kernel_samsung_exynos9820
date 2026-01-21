@@ -96,22 +96,13 @@ export ARCH=arm64
 export PLATFORM_VERSION=12
 export ANDROID_MAJOR_VERSION=s
 
-# Import GCC
-git clone --branch android-14.0.0_r0.140 --depth=1 \
-    https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 \
-    toolchain/aarch64-linux-android-4.9
-
-# Import Clang
-mkdir -p toolchain/clang
-wget -O toolchain/clang/clang-r530567.tar.gz \
-    https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main/clang-r530567.tar.gz
-tar -xzf toolchain/clang/clang-r530567.tar.gz -C toolchain/clang/
+# Import clang-r383902
+git clone -b Neutron-14 https://github.com/Neutron-Toolchains/neutron-clang.git\
+ toolchain/clang
 
 # Setting toolchain path
-export GCC_DIR=${ANDROID_BUILD_TOP}/toolchain/aarch64-linux-android-4.9
 export CLANG_DIR=${ANDROID_BUILD_TOP}/toolchain/clang
-export PATH=${CLANG_DIR}/bin:${GCC_DIR}/bin:$PATH
-export LLVM=1
+export PATH=${CLANG_DIR}/bin:$PATH
 
 # Cooking Kernel Source
 export MAKE_ARGS="
@@ -121,7 +112,9 @@ ARCH=arm64 \
 -j16 \
 CC=clang \
 LD=ld.lld \
-CROSS_COMPILE=${GCC_DIR}/bin/aarch64-linux-android- \
+CROSS_COMPILE=aarch64-linux-gnu- \
+CLANG_TRIPLE=aarch64-linux-gnu- \
+CROSS_COMPILE_ARM32=arm-linux-gnueabi- \
 O=out
 "
 
