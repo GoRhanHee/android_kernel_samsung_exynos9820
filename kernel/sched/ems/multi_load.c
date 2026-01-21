@@ -35,11 +35,14 @@ unsigned long ml_task_runnable(struct task_struct *p)
 {
 	int boost = schedtune_task_boost(p);
 	unsigned long runnable_avg = READ_ONCE(p->se.avg.ml.runnable_avg);
+	unsigned long capacity;
 
 	if (boost == 0)
 		return runnable_avg;
 
-	return runnable_avg + schedtune_margin(SCHED_CAPACITY_SCALE, runnable_avg, boost);;
+	capacity = capacity_orig_of_sse(task_cpu(p), p->sse);
+
+	return runnable_avg + schedtune_margin(capacity, runnable_avg, boost);
 }
 
 /*
@@ -83,11 +86,14 @@ unsigned long ml_boosted_task_util(struct task_struct *p)
 {
 	int boost = schedtune_task_boost(p);
 	unsigned long util = ml_task_util(p);
+	unsigned long capacity;
 
 	if (boost == 0)
 		return util;
 
-	return util + schedtune_margin(SCHED_CAPACITY_SCALE, util, boost);
+	capacity = capacity_orig_of_sse(task_cpu(p), p->sse);
+
+	return util + schedtune_margin(capacity, util, boost);
 }
 
 /*
