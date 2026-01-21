@@ -27,6 +27,10 @@
 #include "gpu_dvfs_handler.h"
 #include "gpu_dvfs_governor.h"
 
+#ifdef CONFIG_EXYNOS9630_BTS
+#include <soc/samsung/bts.h>
+#endif
+
 extern struct kbase_device *pkbdev;
 
 static int gpu_check_target_clock(struct exynos_context *platform, int clock)
@@ -151,12 +155,22 @@ int gpu_set_target_clk_vol(int clk, bool pending_is_allowed)
 #define BS_G3D_PERFORMANCE BS_G3D_PEFORMANCE
 #endif
 
-/*W/A for BTS Driver as Lassen is using Old BTS Driver*/
+	/* MALI_SEC_INTEGRATION : for EXYNOS_BTS */
 	if (platform->gpu_bts_support) {
+#ifdef CONFIG_EXYNOS9630_BTS
+		if (target_clk >= platform->mo_min_clock && !platform->is_set_bts) {
+			bts_add_scenario(platform->bts_scen_idx);
+			platform->is_set_bts = 1;
+		} else if (target_clk < platform->mo_min_clock && platform->is_set_bts) {
+			bts_del_scenario(platform->bts_scen_idx);
+			platform->is_set_bts = 0;
+		}
+#else
 		if (target_clk >= platform->mo_min_clock)
-			bts_update_scen(BS_G3D_PERFORMANCE, 1);	/* GPU IDQ : 0 (max token) */
+			bts_update_scen(BS_G3D_PERFORMANCE, 1); /* GPU IDQ : 0 (max token) */
 		else
-			bts_update_scen(BS_G3D_PERFORMANCE, 0);	/* GPU IDQ : 0x3 (default 12ea) */
+			bts_update_scen(BS_G3D_PERFORMANCE, 0); /* GPU IDQ : 0x3 (default 12ea) */
+#endif
 	}
 
 	mutex_unlock(&platform->gpu_clock_lock);
@@ -530,24 +544,7 @@ int gpu_dvfs_get_level_clock(int clock)
 
 	return -1;
 }
-int gpu_dvfs_get_stock_level(int clock)
-{
-	struct kbase_device *kbdev = pkbdev;
-	struct exynos_context *platform = (struct exynos_context *) kbdev->platform_context;
-	int i;
 
-	DVFS_ASSERT(platform);
-
-	if ((clock < platform->gpu_min_clock) || (clock > platform->gpu_max_clock))
-		return -1;
-
-	for (i = 0; i < platform->table_size; i++) {
-		if (platform->table[i].clock == clock)
-			return i;
-	}
-
-	return -1;
-}
 int gpu_dvfs_get_voltage(int clock)
 {
 	struct kbase_device *kbdev = pkbdev;
