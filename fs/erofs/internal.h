@@ -53,10 +53,7 @@ struct erofs_sb_info {
 	struct mutex umount_mutex;
 
 	/* the dedicated workstation for compression */
-	struct {
-		struct radix_tree_root tree;
-		spinlock_t lock;
-	} workstn;
+	struct radix_tree_root workstn_tree;
 
 	/* threshold for decompression synchronously */
 	unsigned int max_sync_decompress_pages;
@@ -113,9 +110,6 @@ enum {
 };
 
 #define EROFS_LOCKED_MAGIC     (INT_MIN | 0xE0F510CCL)
-
-#define erofs_workstn_lock(sbi)         spin_lock(&(sbi)->workstn.lock)
-#define erofs_workstn_unlock(sbi)       spin_unlock(&(sbi)->workstn.lock)
 
 /* basic unit of the workstation of a super_block */
 struct erofs_workgroup {
