@@ -122,7 +122,6 @@ ARCH=arm64 \
 CC=clang \
 LD=ld.lld \
 CROSS_COMPILE=${GCC_DIR}/bin/aarch64-linux-android- \
-CLANG_TRIPLE=${CLANG_DIR}/bin/aarch64-linux-gnu- \
 O=out
 "
 
