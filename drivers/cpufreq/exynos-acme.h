@@ -58,10 +58,6 @@ struct exynos_cpufreq_domain {
 
 	unsigned int			max_freq;
 	unsigned int			min_freq;
-#ifdef CONFIG_ARM_MODCLOCK
-	unsigned int			max_usable_freq;
-	unsigned int			min_usable_freq;
-#endif	
 	unsigned int			boot_freq;
 	unsigned int			resume_freq;
 	unsigned int			old;
@@ -91,7 +87,7 @@ struct exynos_cpufreq_domain {
 	/* list head of DVFS Manager constraints */
 	struct list_head		dm_list;
 
-	/* list head of User cpuFreq Ctrl (UFC - User Frequency Control) */
+	/* list head of User cpuFreq Ctrl (UFC) */
 	struct list_head		ufc_list;
 
 	bool				need_awake;

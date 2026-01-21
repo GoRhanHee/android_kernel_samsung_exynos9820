@@ -302,55 +302,6 @@ config ARM_EXYNOS_ACME
 
 	  If in doubt, say N.
 
-config ARM_MODCLOCK
-	bool "SAMSUNG EXYNOS ACME MODCLOCK"
-	depends on ARM_EXYNOS_ACME
-	default n
-	 help
-	 Added modification for overclocking and underclocking on 
-	 exynos9820 platform.
-
-	 If in doubt, say N.
-
-if ARM_MODCLOCK
-
-config MAX_FREQ_BIG
-	int "Default maximum frequency big core"
-	default 2314000
-	help
-	Overclock big core exynos9820.
-
-config MIN_FREQ_BIG
-	int "Default minimum frequency big core"
-	default 507000
-	help
-	Underclock big core exynos9820.
-
-config MAX_FREQ_LITTLE
-	int "Default maximum frequency little core "
-	default 1950000
-	help
-	Overclock little core exynos9820.
-
-config MIN_FREQ_LITTLE
-	int "Default minimum frequency little core"
-	default 442000
-	help
-        Underclock little core exynos9820.
-
-config MAX_FREQ_PRIME
-	int "Default maximum frequency prime core "
-	default 2730000
-	help
-	Overclock prime core exynos9820.
-
-config MIN_FREQ_PRIME
-	int "Default minimum frequency prime core"
-	default 520000
-	help
-        Underclock prime core exynos9820.                
-endif	  
-
 config ARM_EXYNOS_UFC
 	bool "SAMSUNG EXYNOS UFC(User Frequency Control) driver"
 	depends on ARM_EXYNOS_ACME
