@@ -5,8 +5,6 @@ CFLAGS += -I../../../../include/uapi/
 CFLAGS += -I../../../../lib
 
 EXTRA_SOURCES := utils.c
-CFLAGS += $(EXTRA_SOURCES)
-
 TEST_GEN_PROGS := incfs_test
 
 include ../../lib.mk
