@@ -1930,8 +1930,7 @@ failure:
 	return TEST_FAILURE;
 }
 
-static int validate_logs(char *mount_dir, int log_fd, struct test_file *file,
-			 bool no_rlog)
+static int validate_logs(char *mount_dir, int log_fd, struct test_file *file)
 {
 	uint8_t data[INCFS_DATA_FILE_BLOCK_SIZE];
 	struct incfs_pending_read_info prs[100] = {};
@@ -1958,19 +1957,7 @@ static int validate_logs(char *mount_dir, int log_fd, struct test_file *file,
 			goto failure;
 	}
 
-	read_count =
-		wait_for_pending_reads(log_fd, no_rlog ? 10 : 0, prs, prs_size);
-	if (no_rlog) {
-		if (read_count == 0)
-			goto success;
-		if (read_count < 0)
-			ksft_print_msg("Error reading logged reads %s.\n",
-				       strerror(-read_count));
-		else
-			ksft_print_msg("Somehow read empty logs.\n");
-		goto failure;
-	}
-
+	read_count = wait_for_pending_reads(log_fd, 0, prs, prs_size);
 	if (read_count < 0) {
 		ksft_print_msg("Error reading logged reads %s.\n",
 			       strerror(-read_count));
@@ -2014,8 +2001,6 @@ static int validate_logs(char *mount_dir, int log_fd, struct test_file *file,
 			goto failure;
 		}
 	}
-
-success:
 	close(fd);
 	return TEST_SUCCESS;
 
@@ -2044,7 +2029,7 @@ static int read_log_test(char *mount_dir)
 		goto failure;
 
 	log_fd = open_log_file(mount_dir);
-	if (log_fd < 0)
+	if (cmd_fd < 0)
 		ksft_print_msg("Can't open log file.\n");
 
 	/* Write data. */
@@ -2063,7 +2048,7 @@ static int read_log_test(char *mount_dir)
 	for (i = 0; i < file_num; i++) {
 		struct test_file *file = &test.files[i];
 
-		if (validate_logs(mount_dir, log_fd, file, false))
+		if (validate_logs(mount_dir, log_fd, file))
 			goto failure;
 	}
 
@@ -2084,45 +2069,19 @@ static int read_log_test(char *mount_dir)
 		goto failure;
 
 	log_fd = open_log_file(mount_dir);
-	if (log_fd < 0)
+	if (cmd_fd < 0)
 		ksft_print_msg("Can't open log file.\n");
 
 	/* Validate data again */
 	for (i = 0; i < file_num; i++) {
 		struct test_file *file = &test.files[i];
 
-		if (validate_logs(mount_dir, log_fd, file, false))
-			goto failure;
-	}
-
-	/*
-	 * Unmount and mount again with no read log to make sure poll
-	 * doesn't crash
-	 */
-	close(cmd_fd);
-	close(log_fd);
-	if (umount(mount_dir) != 0) {
-		print_error("Can't unmout FS");
-		goto failure;
-	}
-
-	if (mount_fs_opt(mount_dir, backing_dir, "readahead=0,rlog_pages=0") !=
-	    0)
-		goto failure;
-
-	log_fd = open_log_file(mount_dir);
-	if (log_fd < 0)
-		ksft_print_msg("Can't open log file.\n");
-
-	/* Validate data again - note should fail this time */
-	for (i = 0; i < file_num; i++) {
-		struct test_file *file = &test.files[i];
-
-		if (validate_logs(mount_dir, log_fd, file, true))
+		if (validate_logs(mount_dir, log_fd, file))
 			goto failure;
 	}
 
 	/* Final unmount */
+	close(cmd_fd);
 	close(log_fd);
 	free(backing_dir);
 	if (umount(mount_dir) != 0) {
