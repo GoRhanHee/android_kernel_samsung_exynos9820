@@ -26,7 +26,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y git-core flex bison build-essential curl \
           zlib1g-dev libc6-dev-i386 lib32z1-dev libncurses5-dev make automake \
-          zip unzip p7zip-full tar lz4 xz-utils zlib1g-dev uuid-dev libssl-dev
+          zip unzip p7zip-full tar lz4 xz-utils zlib1g-dev uuid-dev libssl-dev \
           checkinstall libncurses-dev libsqlite3-dev tk-dev libgdbm-dev \
           libbz2-dev libffi-dev libreadline-dev libdb-dev wget
         wget http://security.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2ubuntu0.1_amd64.deb && sudo dpkg -i libtinfo5_6.3-2ubuntu0.1_amd64.deb  
