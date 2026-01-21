@@ -2,29 +2,27 @@
 /*
  * Copyright 2018 Google LLC
  */
-#include <alloca.h>
-#include <dirent.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <lz4.h>
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
-
-#include <sys/mount.h>
-#include <sys/stat.h>
 #include <sys/types.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/mount.h>
+#include <errno.h>
 #include <sys/wait.h>
 #include <sys/xattr.h>
-
+#include <alloca.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdint.h>
 #include <linux/random.h>
 #include <linux/unistd.h>
 
-#include <kselftest.h>
+#include "../../kselftest.h"
 
+#include "lz4.h"
 #include "utils.h"
 
 #define TEST_FAILURE 1
@@ -210,7 +208,7 @@ int open_file_by_id(const char *mnt_dir, incfs_uuid_t id, bool use_ioctl)
 {
 	char *path = get_index_filename(mnt_dir, id);
 	int cmd_fd = open_commands_file(mnt_dir);
-	int fd = open(path, O_RDWR | O_CLOEXEC);
+	int fd = open(path, O_RDWR);
 	struct incfs_permit_fill permit_fill = {
 		.file_descriptor = fd,
 	};
@@ -283,7 +281,7 @@ static int emit_test_blocks(char *mnt_dir, struct test_file *file,
 		.fill_blocks = ptr_to_u64(block_buf),
 	};
 	ssize_t write_res = 0;
-	int fd = -1;
+	int fd;
 	int error = 0;
 	int i = 0;
 	int blocks_written = 0;
@@ -446,7 +444,7 @@ static loff_t read_whole_file(char *filename)
 	loff_t bytes_read = 0;
 	uint8_t buff[16 * 1024];
 
-	fd = open(filename, O_RDONLY | O_CLOEXEC);
+	fd = open(filename, O_RDONLY);
 	if (fd <= 0)
 		return fd;
 
@@ -478,7 +476,7 @@ static int read_test_file(uint8_t *buf, size_t len, char *filename,
 	size_t bytes_to_read = len;
 	off_t offset = ((off_t)block_idx) * INCFS_DATA_FILE_BLOCK_SIZE;
 
-	fd = open(filename, O_RDONLY | O_CLOEXEC);
+	fd = open(filename, O_RDONLY);
 	if (fd <= 0)
 		return fd;
 
@@ -911,7 +909,7 @@ static bool iterate_directory(char *dir_to_iterate, bool root, int file_count)
 	int i;
 
 	/* Test directory iteration */
-	int fd = open(dir_to_iterate, O_RDONLY | O_DIRECTORY | O_CLOEXEC);
+	int fd = open(dir_to_iterate, O_RDONLY | O_DIRECTORY);
 
 	if (fd < 0) {
 		print_error("Can't open directory\n");
@@ -1112,7 +1110,7 @@ static int basic_file_ops_test(char *mount_dir)
 		char *path = concat_file_name(mount_dir, file->name);
 		int fd;
 
-		fd = open(path, O_RDWR | O_CLOEXEC);
+		fd = open(path, O_RDWR);
 		free(path);
 		if (fd <= 0) {
 			print_error("Can't open file");
@@ -1945,7 +1943,7 @@ static int validate_logs(char *mount_dir, int log_fd, struct test_file *file,
 	char *filename = concat_file_name(mount_dir, file->name);
 	int fd;
 
-	fd = open(filename, O_RDONLY | O_CLOEXEC);
+	fd = open(filename, O_RDONLY);
 	free(filename);
 	if (fd <= 0)
 		return TEST_FAILURE;
@@ -2127,7 +2125,7 @@ static int read_log_test(char *mount_dir)
 	/*
 	 * Remount and check that logs start working again
 	 */
-	drop_caches = open("/proc/sys/vm/drop_caches", O_WRONLY | O_CLOEXEC);
+	drop_caches = open("/proc/sys/vm/drop_caches", O_WRONLY);
 	if (drop_caches == -1)
 		goto failure;
 	i = write(drop_caches, "3", 1);
@@ -2217,7 +2215,7 @@ static int validate_ranges(const char *mount_dir, struct test_file *file)
 	int cmd_fd = -1;
 	struct incfs_permit_fill permit_fill;
 
-	fd = open(filename, O_RDONLY | O_CLOEXEC);
+	fd = open(filename, O_RDONLY);
 	free(filename);
 	if (fd <= 0)
 		return TEST_FAILURE;
@@ -2457,7 +2455,7 @@ static int validate_hash_ranges(const char *mount_dir, struct test_file *file)
 	if (file->size <= 4096 / 32 * 4096)
 		return 0;
 
-	fd = open(filename, O_RDONLY | O_CLOEXEC);
+	fd = open(filename, O_RDONLY);
 	free(filename);
 	if (fd <= 0)
 		return TEST_FAILURE;
@@ -2592,7 +2590,7 @@ int main(int argc, char *argv[])
 	// NOTE - this abuses the concept of randomness - do *not* ever do this
 	// on a machine for production use - the device will think it has good
 	// randomness when it does not.
-	fd = open("/dev/urandom", O_WRONLY | O_CLOEXEC);
+	fd = open("/dev/urandom", O_WRONLY);
 	count = 4096;
 	for (int i = 0; i < 128; ++i)
 		ioctl(fd, RNDADDTOENTCNT, &count);
