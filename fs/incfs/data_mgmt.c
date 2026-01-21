@@ -797,7 +797,7 @@ static int process_file_signature_md(struct incfs_file_signature *sg,
 	int error = 0;
 	struct incfs_df_signature *signature =
 		kzalloc(sizeof(*signature), GFP_NOFS);
-	void *buf = NULL;
+	void *buf = 0;
 	ssize_t read;
 
 	if (!df || !df->df_backing_file_context ||
