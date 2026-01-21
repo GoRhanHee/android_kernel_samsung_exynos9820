@@ -1194,7 +1194,7 @@ out:
 			free_backref_node(cache, lower);
 		}
 
-		remove_backref_node(cache, node);
+		free_backref_node(cache, node);
 		return ERR_PTR(err);
 	}
 	ASSERT(!node || !node->detached);
