@@ -1,3 +1,4 @@
+![LOGO](./prebuilts/logo.png)
 # GoRhanHee Kernel for Samsung Exynos 9820 Stock Rom 
 
 An optimized stock-based kernel for Samsung Galaxy S10 series (Exynos 9820) with integrated **KernelSU** and **Ramdisk** support.
@@ -13,21 +14,24 @@ This project provides a modified version of the official Samsung stock kernel. I
 
 ## 📱 Supported Devices
 This kernel is compatible with the following Exynos 9820/9825 models:
-- **Galaxy S10e (SM-G970F/N)** 
-- **Galaxy S10 (SM-G973F/N)**
-- **Galaxy S10+ (SM-G975F/N)**
-- **Galaxy S10 5G (SM-G977B/N)**
-- **Galaxy Note 10 (SM-N970F)**
-- **Galaxy Note 10 5G (SM-N971N)**
-- **Galaxy Note 10+ (SM-N975F)**
-- **Galaxy Note 10+ 5G (SM-N976B/N)**
+
+| Device |  Code Name  | Model |
+|--------|------------------|-----------|
+| Galaxy S10e   | beyond0lte/beyond0lteks  | SM-G970F/N |
+| Galaxy S10   | beyond1lte/beyond1lteks    | SM-G973F/N |
+| Galaxy S10+   | beyond2lte/beyond2lteks    | SM-G975F/N |
+| Galaxy S10 5G   | beyondx/beyondxks    | SM-G977B/N |
+| Galaxy Note10   | d1    | SM-N970F |
+| Galaxy Note10 5G   | d1xks    | SM-N971N |
+| Galaxy Note10+   | d2s    | SM-N975F |
+| Galaxy Note10+ 5G   | d2x/d2xks    | SM-N976B/N |
 
 ## 🛠 How Kernel Build?
 
 ### 🟢 Local Build
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/GoRhanHee/android_kernel_samsung_exynos9820.git
+   git clone --depth=1 https://github.com/GoRhanHee/android_kernel_samsung_exynos9820.git
    ```
 2. **Setting permission:**   
    ```bash
@@ -38,22 +42,11 @@ This kernel is compatible with the following Exynos 9820/9825 models:
    ```bash
     ./build.sh ${MODEL} ${KSU} # Ex) ./build.sh beyond1lteks y
    ```   
-**Model List:**     
+**Model:**     
    ```bash
-    beyond0lte  # SM-G970F
-    beyond0lteks    # SM-G970N
-    beyond1lte  # SM-G973F
-    beyond1lteks    # SM-G973N
-    beyond2lte  # SM-G975F
-    beyond2lteks    # SM-G975N
-    beyondx     # SM-G977B
-    beyondxks   # SM-G977N
-    d1      # SM-N970F
-    d1xks   # SM-N971N
-    d2s     # SM-N975F
-    d2x     # SM-N976B
-    d2xks   # SM-N976N
-   ``` 
+    # Refer Support Device table
+   ```
+
 **KSU:**     
    ```bash
     y # Include KernelSU-Next
@@ -81,8 +74,8 @@ This kernel is compatible with the following Exynos 9820/9825 models:
 
 * [LineageOS Team](https://github.com/LineageOS/android_kernel_samsung_exynos9820)
 
-* [ExtremeXT](https://github.com/ExtremeXT/android_kernel_samsung_exynos9820)
+* [ExtremeXT Kernel](https://github.com/ExtremeXT/android_kernel_samsung_exynos9820)
 
-* [ravindu644](https://github.com/ravindu644/samsung_exynos9820_stock)
+* [ravindu644's Kernel](https://github.com/ravindu644/samsung_exynos9820_stock)
 
 * [GoRhanHee](https://github.com/GoRhanHee) : GorhanHee Kernel Developer
