@@ -97,7 +97,7 @@ export PLATFORM_VERSION=12
 export ANDROID_MAJOR_VERSION=s
 
 # Import clang-r383902
-git clone https://github.com/Kry9toN/clang.git \
+git clone -b Neutron-14 https://github.com/Neutron-Toolchains/neutron-clang.git\
  toolchain/clang
 
 # Setting toolchain path
