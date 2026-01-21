@@ -2503,7 +2503,7 @@ static void cpuhp_online_cpu_device(unsigned int cpu)
 	kobject_uevent(&dev->kobj, KOBJ_ONLINE);
 }
 
-int cpuhp_smt_disable(enum cpuhp_smt_control ctrlval)
+static int cpuhp_smt_disable(enum cpuhp_smt_control ctrlval)
 {
 	int cpu, ret = 0;
 
@@ -2537,7 +2537,7 @@ int cpuhp_smt_disable(enum cpuhp_smt_control ctrlval)
 	return ret;
 }
 
-int cpuhp_smt_enable(void)
+static int cpuhp_smt_enable(void)
 {
 	int cpu, ret = 0;
 
