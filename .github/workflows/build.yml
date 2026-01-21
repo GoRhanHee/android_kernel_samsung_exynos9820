@@ -24,18 +24,12 @@ jobs:
     - name: Install required package
       run: |
         sudo apt-get update
-        sudo apt-get install -y git-core flex bison build-essential curl \
-          zlib1g-dev libc6-dev-i386 lib32z1-dev libncurses5-dev make automake\
-          zip unzip p7zip-full tar lz4 xz-utils zlib1g-dev uuid-dev libssl-dev
-        wget http://security.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2ubuntu0.1_amd64.deb && sudo dpkg -i libtinfo5_6.3-2ubuntu0.1_amd64.deb  
+        sudo apt install libncurses5-dev python2 libtinfo5 -y      
 
     - name: Setting permission
       run: |    
-        chmod +x *.sh
+        chmod +x build.sh
         chmod -R +x prebuilts/    
-
-    - name: Install Python2
-      run: ./python2.sh         
 
     - name: Cooking Kernel
       run: ./build.sh ${{ matrix.device }} ${{ github.event.inputs.KSU }}
