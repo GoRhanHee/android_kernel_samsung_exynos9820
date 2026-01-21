@@ -141,10 +141,13 @@ mv ${AIK_DIR}/image-new.img ${ANDROID_BUILD_TOP}/prebuilts/boot.img
 # Cooking dtbo.img
 ./prebuilts/mkdtimg cfg_create prebuilts/dtbo.img prebuilts/dtconfigs/${DEVICE}.cfg -d ${OUT_DIR}/arch/arm64/boot/dts/samsung
 
+# Copying patched vbmeta.img
+cp ${ANDROID_BUILD_TOP}/prebuilts/vbmeta/${DEVICE}.img ${ANDROID_BUILD_TOP}/prebuilts/vbmeta.img
+
 # Cooking flashable tar file
 cd ${ANDROID_BUILD_TOP}/prebuilts
 if [ "${KSU}" == "y" ]; then
-    tar -cvf "${DEVICE}_KernelSU_Kernel_File.tar" boot.img dt.img dtbo.img 
+    tar -cvf "${DEVICE}_KernelSU_Kernel_File.tar" boot.img dt.img dtbo.img vbmeta.img
 else
-    tar -cvf "${DEVICE}_Ramdisk_Kernel_File.tar" boot.img dt.img dtbo.img 
+    tar -cvf "${DEVICE}_Ramdisk_Kernel_File.tar" boot.img dt.img dtbo.img vbmeta.img
 fi 
