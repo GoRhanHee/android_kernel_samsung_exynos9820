@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         device: [beyond0lte, beyond0lteks, beyond1lte, beyond1lteks, beyond2lte, beyond2lteks, beyondx, beyondxks, d1, d1xks, d2s, d2x, d2xks]
-    runs-on: ubuntu-20.04 
+    runs-on: ubuntu-latest 
 
     steps:
     - name: Import kernel source
