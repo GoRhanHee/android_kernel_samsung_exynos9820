@@ -96,32 +96,16 @@ export ARCH=arm64
 export PLATFORM_VERSION=12
 export ANDROID_MAJOR_VERSION=s
 
-# Define toolchain variables
-CLANG_DIR=$PWD/toolchain/neutron_18
-PATH=$CLANG_DIR/bin:$PATH
-
-# Check if toolchain exists
-if [ ! -f "$CLANG_DIR/bin/clang-18" ]; then
-    echo "-----------------------------------------------"
-    echo "Toolchain not found! Downloading..."
-    echo "-----------------------------------------------"
-    rm -rf $CLANG_DIR
-    mkdir -p $CLANG_DIR
-    pushd toolchain/neutron_18 > /dev/null
-    bash <(curl -s "https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman") -S=05012024
-    echo "-----------------------------------------------"
-    echo "Patching toolchain..."
-    echo "-----------------------------------------------"
-    bash <(curl -s "https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman") --patch=glibc
-    echo "-----------------------------------------------"
-    echo "Cleaning up..."
-    popd > /dev/null
+# Setting toolchain
+TOOLCHAIN_URL="https://github.com/GoRhanHee/exynos9820_toolchain/releases/download/toolchain/toolchain.tar.xz"
+TOOLCHAIN_FILE=$(basename "$TOOLCHAIN_URL")
+if [ ! -f "$TOOLCHAIN_FILE" ]; then
+    wget -q --show-progress -O "$TOOLCHAIN_FILE" "$TOOLCHAIN_URL"
 fi
+tar -xf "$TOOLCHAIN_FILE" && rm "$TOOLCHAIN_FILE"
 
 # Cooking Kernel Source
 MAKE_ARGS="
-LLVM=1 \
-LLVM_IAS=1 \
 ARCH=arm64 \
 -j16 \
 O=out
