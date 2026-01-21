@@ -10,10 +10,10 @@
 #include <linux/export.h>
 
 /**
- * int_sqrt - computes the integer square root
+ * int_sqrt - rough approximation to sqrt
  * @x: integer of which to calculate the sqrt
  *
- * Computes: floor(sqrt(x))
+ * A very rough approximation to the sqrt() function.
  */
 inline unsigned long int_sqrt(unsigned long x)
 {
