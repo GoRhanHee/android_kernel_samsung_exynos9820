@@ -1,4 +1,4 @@
-name: Manual Artifact to Release
+name: Release
 
 on:
   workflow_dispatch:
