@@ -116,7 +116,19 @@ LLVM_IAS=1 \
 ARCH=arm64 \
 -j16 \
 CC=clang \
-CROSS_COMPILE=${GCC_DIR}/bin/aarch64-linux-gnu- \
+LD=ld.lld \
+AR=llvm-ar \
+NM=llvm-nm \
+AS=llvm-as \
+READELF=llvm-readelf \
+OBJCOPY=llvm-objcopy \
+OBJDUMP=llvm-objdump \
+OBJSIZE=llvm-size \
+STRIP=llvm-strip \
+LLVM_AR=llvm-ar \
+LLVM_DIS=llvm-dis \
+LLVM_NM=llvm-nm \
+CROSS_COMPILE=aarch64-linux-gnu- \
 CLANG_TRIPLE=aarch64-linux-gnu- \
 O=out
 "
