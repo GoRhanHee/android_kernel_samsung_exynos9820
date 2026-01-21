@@ -215,7 +215,10 @@ struct data_file {
 
 	struct mtree *df_hash_tree;
 
-	struct incfs_df_signature *df_signature;
+	struct ondisk_signature *df_signature;
+
+	/* True, if file signature has already been validated. */
+	bool df_signature_validated;
 };
 
 struct dir_file {
