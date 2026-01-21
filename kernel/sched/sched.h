@@ -25,7 +25,6 @@
 #include <linux/u64_stats_sync.h>
 #include <linux/kernel_stat.h>
 #include <linux/binfmts.h>
-#include <linux/bitops.h>
 #include <linux/mutex.h>
 #include <linux/spinlock.h>
 #include <linux/stop_machine.h>
