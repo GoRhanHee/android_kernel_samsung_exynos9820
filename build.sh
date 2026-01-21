@@ -116,6 +116,7 @@ export LLVM=1
 # Cooking Kernel Source
 export MAKE_ARGS="
 LLVM=1 \
+LLVM_IAS=1 \
 ARCH=arm64 \
 -j16 \
 CC=clang \
