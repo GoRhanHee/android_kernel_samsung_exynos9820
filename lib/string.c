@@ -949,13 +949,19 @@ EXPORT_SYMBOL(memcpy);
  */
 void *memmove(void *dest, const void *src, size_t count)
 {
-	if (dest < src || src + count <= dest)
-		return memcpy(dest, src, count);
+	char *tmp;
+	const char *s;
 
-	if (dest > src) {
-		const char *s = src + count;
-		char *tmp = dest + count;
-
+	if (dest <= src) {
+		tmp = dest;
+		s = src;
+		while (count--)
+			*tmp++ = *s++;
+	} else {
+		tmp = dest;
+		tmp += count;
+		s = src;
+		s += count;
 		while (count--)
 			*--tmp = *--s;
 	}
