@@ -24,10 +24,12 @@ jobs:
     - name: Install required package
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential bc bison flex libssl-dev make libncurses5-dev git curl clang lld \
-        libelf-dev erofs-utils android-sdk-libsparse-utils build-essential automake autoconf libtool pkg-config fuse3 e2fsprogs pv liblz4-dev uuid-dev \
-        libfuse3-dev fuse3 f2fs-tools fuse2fs attr zlib1g-dev rsync \
-        device-tree-compiler lz4 xz-utils zlib1g-dev openjdk-17-jdk gcc g++ python3 python-is-python3 p7zip-full
+        sudo apt-get install -y \
+          build-essential bc bison flex libssl-dev make libncurses5-dev git curl clang lld \
+          libelf-dev erofs-utils android-sdk-libsparse-utils build-essential automake autoconf libtool pkg-config fuse3 e2fsprogs pv liblz4-dev uuid-dev \
+          libfuse3-dev fuse3 f2fs-tools fuse2fs attr zlib1g-dev rsync \
+          device-tree-compiler lz4 xz-utils zlib1g-dev openjdk-17-jdk gcc g++ python3 python-is-python3 p7zip-full
+        wget http://security.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2ubuntu0.1_amd64.deb && sudo dpkg -i libtinfo5_6.3-2ubuntu0.1_amd64.deb 
 
     - name: Setting permission
       run: |    
