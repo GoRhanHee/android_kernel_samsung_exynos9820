@@ -7,7 +7,6 @@
 #include <linux/slab.h>
 #include <linux/ems.h>
 #include <linux/ems_service.h>
-#include <linux/battery_saver.h>
 
 #include <trace/events/sched.h>
 
@@ -413,7 +412,7 @@ int schedtune_task_boost(struct task_struct *p)
 	struct schedtune *st;
 	int task_boost;
 
-	if (!unlikely(schedtune_initialized) || is_battery_saver_on())
+	if (unlikely(!schedtune_initialized))
 		return 0;
 
 	/* Get task boost value */
@@ -430,7 +429,7 @@ int schedtune_util_est_en(struct task_struct *p)
 	struct schedtune *st;
 	int util_est_en;
 
-	if (!unlikely(schedtune_initialized) || is_battery_saver_on())
+	if (unlikely(!schedtune_initialized))
 		return 0;
 
 	/* Get util_est value */
@@ -464,7 +463,7 @@ int schedtune_prefer_idle(struct task_struct *p)
 	struct schedtune *st;
 	int prefer_idle;
 
-	if (!unlikely(schedtune_initialized) || is_battery_saver_on())
+	if (unlikely(!schedtune_initialized))
 		return 0;
 
 	/* Get prefer_idle value */
@@ -557,9 +556,6 @@ prefer_idle_read(struct cgroup_subsys_state *css, struct cftype *cft)
 {
 	struct schedtune *st = css_st(css);
 
-	if (is_battery_saver_on())
-		return 0;
-
 	return st->prefer_idle;
 }
 
@@ -577,9 +573,6 @@ static u64
 prefer_perf_read(struct cgroup_subsys_state *css, struct cftype *cft)
 {
 	struct schedtune *st = css_st(css);
-
-	if (is_battery_saver_on())
-		return 0;
 
 	return st->prefer_perf;
 }
