@@ -346,6 +346,7 @@ static int menu_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
 	if (drv->states[0].flags & CPUIDLE_FLAG_POLLING) {
 		struct cpuidle_state *s = &drv->states[1];
 		unsigned int polling_threshold;
+
 		/*
 		 * We want to default to C1 (hlt), not to busy polling
 		 * unless the timer is happening really really soon, or
@@ -402,8 +403,9 @@ static int menu_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
 	idle_info->bUse_GovDecision = 0;
 	for (i = first_idx; i < drv->state_count; i++) {
 		struct cpuidle_state *s = &drv->states[i];
+		struct cpuidle_state_usage *su = &dev->states_usage[i];
 
-		if (dev->states_usage[i].disable)
+		if (s->disabled || su->disable)
 			continue;
 		if (idx == -1)
 			idx = i; /* first enabled state */
@@ -445,7 +447,8 @@ static int menu_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
 			 * tick, so try to correct that.
 			 */
 			for (i = idx - 1; i >= 0; i--) {
-				if (dev->states_usage[i].disable)
+			    if (drv->states[i].disabled ||
+			        dev->states_usage[i].disable)
 					continue;
 
 				idle_info->bUse_GovDecision = 1;
