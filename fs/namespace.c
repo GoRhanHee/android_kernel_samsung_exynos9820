@@ -331,11 +331,6 @@ static int mnt_alloc_vfsmount(struct mount *mnt)
 static void mnt_free_id(struct mount *mnt)
 {
 	int id = mnt->mnt_id;
-	spin_lock(&mnt_id_lock);
-	ida_remove(&mnt_id_ida, id);
-	if (mnt_id_start > id)
-		mnt_id_start = id;
-	spin_unlock(&mnt_id_lock);
 #ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
 	// First we have to check if susfs_mnt_id_backup == DEFAULT_KSU_MNT_ID,
 	// if so, no need to free.
@@ -345,12 +340,20 @@ static void mnt_free_id(struct mount *mnt)
 
 	// Second if susfs_mnt_id_backup was set after mnt_id reorder, free it if so.
 	if (likely(mnt->mnt.susfs_mnt_id_backup)) {
-		ida_free(&mnt_id_ida, mnt->mnt.susfs_mnt_id_backup);
+		spin_lock(&mnt_id_lock);
+		ida_remove(&mnt_id_ida, mnt->mnt.susfs_mnt_id_backup);
+		if (mnt_id_start > mnt->mnt.susfs_mnt_id_backup)
+			mnt_id_start = mnt->mnt.susfs_mnt_id_backup;
+		spin_unlock(&mnt_id_lock);
 		return;
 	}
 
-#endif
-	ida_free(&mnt_id_ida, mnt->mnt_id);
+#endif	
+	spin_lock(&mnt_id_lock);
+	ida_remove(&mnt_id_ida, id);
+	if (mnt_id_start > id)
+		mnt_id_start = id;
+	spin_unlock(&mnt_id_lock);
 }
 
 /*
@@ -361,7 +364,19 @@ static void mnt_free_id(struct mount *mnt)
 static int mnt_alloc_group_id(struct mount *mnt)
 {
 	int res;
-
+#ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
+	if (susfs_is_current_ksu_domain()) {
+		if (!ida_pre_get(&mnt_group_ida, GFP_KERNEL))
+			return -ENOMEM;
+		// If so, assign a sus mnt_group id DEFAULT_KSU_MNT_GROUP_ID from mnt_group_ida
+		res = ida_get_new_above(&mnt_group_ida,
+					susfs_mnt_group_start,
+					&mnt->mnt_group_id);
+		if (!res)
+			susfs_mnt_group_start = mnt->mnt_group_id + 1;
+		return res;
+	}
+#endif
 	if (!ida_pre_get(&mnt_group_ida, GFP_KERNEL))
 		return -ENOMEM;
 
@@ -372,27 +387,6 @@ static int mnt_alloc_group_id(struct mount *mnt)
 		mnt_group_start = mnt->mnt_group_id + 1;
 
 	return res;
-#ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
-	int res;
-
-	/* - At frist susfs_is_sdcard_android_data_decrypted is set to false in kernel,
-	 *   and it is still allowed to assign our custom mnt_group_id via susfs_ksu_mnt_group_ida
-	 *   if it is ksu mounts, until susfs_is_sdcard_android_data_decrypted is set to true
-	 *   when boot-completed stage is triggered in core_hook.c 
-	 */
-	if (susfs_is_current_ksu_domain()) {
-		res = ida_alloc_min(&mnt_group_ida, DEFAULT_KSU_MNT_GROUP_ID, GFP_KERNEL);
-		goto bypass_orig_flow;
-	}
-	res = ida_alloc_min(&mnt_group_ida, 1, GFP_KERNEL);
-bypass_orig_flow:
-#else
-	int res = ida_alloc_min(&mnt_group_ida, 1, GFP_KERNEL);
-#endif
-	if (res < 0)
-		return res;
-	mnt->mnt_group_id = res;
-	return 0;
 }
 
 /*
