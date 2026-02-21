@@ -23,7 +23,6 @@ jobs:
           - d2xks
         mode:
           - ksun
-          - susfs
           - ramdisk
     runs-on: ubuntu-latest 
 

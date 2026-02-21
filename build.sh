@@ -10,8 +10,6 @@ export OUT_DIR=${ANDROID_BUILD_TOP}/out
 # Import KernelSU-Next driver
 if [ "${MODE}" == 'ksun' ]; then
     curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/legacy/kernel/setup.sh" | bash -s legacy
-elif [ "${MODE}" == 'susfs' ]; then
-    curl -LSs "https://raw.githubusercontent.com/GoRhanHee/KernelSU-Next/legacy-susfs/kernel/setup.sh" | bash -s legacy-susfs
 fi
 
 # Define specific variables
@@ -119,8 +117,6 @@ DEFCONFIG="exynos9820-${DEVICE}_defconfig ${SOC}.config"
 
 if [ "${MODE}" == "ksun" ]; then
     CONFIGS="${DEFCONFIG} kernelsu.config"
-elif [ "${MODE}" == "susfs" ]; then
-    CONFIGS="${DEFCONFIG} kernelsu.config susfs.config"
 else
     CONFIGS="${DEFCONFIG}"    
 fi
