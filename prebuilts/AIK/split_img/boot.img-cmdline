@@ -1,0 +1,1 @@
+androidboot.selinux=permissive androidboot.selinux=permissive loop.max_part=7

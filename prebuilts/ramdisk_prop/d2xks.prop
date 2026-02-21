@@ -1,0 +1,23 @@
+####################################
+# from generate-common-build-props
+# These properties identify this partition image.
+####################################
+ro.product.bootimage.brand=samsung
+ro.product.bootimage.device=d2x
+ro.product.bootimage.manufacturer=samsung
+ro.product.bootimage.model=SM-N976N
+ro.product.bootimage.name=d2xks
+ro.bootimage.build.date=Wed Aug 16 10:48:37 KST 2023
+ro.bootimage.build.date.utc=1692150517
+ro.bootimage.build.fingerprint=samsung/d2xks/d2x:12/SP1A.210812.016/N976NKSU2HWH5:user/release-keys
+ro.bootimage.build.id=SP1A.210812.016
+ro.bootimage.build.tags=release-keys
+ro.bootimage.build.type=user
+ro.bootimage.build.version.incremental=N976NKSU2HWH5
+ro.bootimage.build.version.release=12
+ro.bootimage.build.version.release_or_codename=12
+ro.bootimage.build.version.sdk=31
+# Auto-added by post_process_props.py
+persist.sys.usb.config=mtp
+# end of file
+
