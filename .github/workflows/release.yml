@@ -1,0 +1,47 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: 'Workflow Run ID'
+        required: true
+        type: string
+      tag_name:
+        description: 'Release Tag'
+        required: true
+        type: string
+      release_title:
+        description: 'Release Title'
+        required: true
+        type: string
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download Artifact from Specific Run
+        uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ github.event.inputs.run_id }}
+          path: ./downloaded-assets
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Display structure of downloaded files
+        run: ls -R ./downloaded-assets
+
+      - name: Create Official Release and Upload Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag_name }}
+          name: ${{ github.event.inputs.release_title }}
+          files: |
+            ./downloaded-assets/**/*
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

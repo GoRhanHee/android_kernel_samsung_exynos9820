@@ -1,0 +1,58 @@
+name: Samsung Exynos9820 Kernel Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        model:
+          - beyond0lte
+          - beyond0lteks
+          - beyond1lte
+          - beyond1lteks
+          - beyond2lte
+          - beyond2lteks
+          - beyondx
+          - beyondxks
+          - d1
+          - d1xks
+          - d2s
+          - d2x
+          - d2xks
+        mode:
+          - ksun
+          - susfs
+          - ramdisk
+    runs-on: ubuntu-latest 
+
+    steps:
+    - name: Import kernel source
+      uses: actions/checkout@v4  
+      
+    - name: Install required package
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential git libssl-dev bc flex bison \
+          libncurses5-dev libncurses-dev cpio zip unzip \
+          python3 curl rsync kmod libelf-dev \
+          lz4 tar openssl python3-pip \
+          gcc clang
+        wget http://security.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2ubuntu0.1_amd64.deb && sudo dpkg -i libtinfo5_6.3-2ubuntu0.1_amd64.deb   
+
+    - name: Setting permission
+      run: |    
+        chmod +x build.sh
+        chmod -R +x prebuilts/    
+
+    - name: Cooking Kernel
+      run: ./build.sh ${{ matrix.model }} ${{ matrix.mode }}
+
+    - name : Upload flashable file
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.model }}_${{ matrix.mode }}_Kernel_File
+        path: |
+          prebuilts/GoRhanHee_Kernel_for_${{ matrix.model }}_${{ matrix.mode }}.zip

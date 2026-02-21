@@ -2,10 +2,17 @@
 
 # Compiling Setting
 export DEVICE=$1
-export KSU=$2
+export MODE=$2
 export ANDROID_BUILD_TOP=$(pwd)
 export AIK_DIR=${ANDROID_BUILD_TOP}/prebuilts/AIK
 export OUT_DIR=${ANDROID_BUILD_TOP}/out
+
+# Import KernelSU-Next driver
+if [ "${MODE}" == 'ksun' ]; then
+    curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/legacy/kernel/setup.sh" | bash -s legacy
+elif [ "${MODE}" == 'susfs' ]; then
+    curl -LSs "https://raw.githubusercontent.com/sidex15/KernelSU-Next/legacy-susfs/kernel/setup.sh" | bash -s legacy-susfs
+fi
 
 # Define specific variables
 case ${DEVICE} in
@@ -110,10 +117,12 @@ O=out
 
 DEFCONFIG="exynos9820-${DEVICE}_defconfig ${SOC}.config"
 
-if [ "${KSU}" == "y" ]; then
+if [ "${MODE}" == "ksun" ]; then
     CONFIGS="${DEFCONFIG} kernelsu.config"
+elif [ "${MODE}" == "susfs" ]; then
+    CONFIGS="${DEFCONFIG} kernelsu.config susfs.config"
 else
-    CONFIGS="${DEFCONFIG}"
+    CONFIGS="${DEFCONFIG}"    
 fi
 
 make ${MAKE_ARGS} ${CONFIGS} || exit 1
@@ -143,4 +152,4 @@ cp ${ANDROID_BUILD_TOP}/prebuilts/vbmeta/${DEVICE}.img ${ANDROID_BUILD_TOP}/preb
 
 # Cooking flashable tar file
 cd ${ANDROID_BUILD_TOP}/prebuilts
-zip -r GoRhanHee_Kernel_for_${DEVICE}.zip META-INF boot.img dt.img dtbo.img
+zip -r GoRhanHee_Kernel_for_${DEVICE}_${MODE}.zip META-INF boot.img dt.img dtbo.img
