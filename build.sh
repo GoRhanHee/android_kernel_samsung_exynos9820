@@ -11,7 +11,7 @@ export OUT_DIR=${ANDROID_BUILD_TOP}/out
 if [ "${MODE}" == 'ksun' ]; then
     curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/legacy/kernel/setup.sh" | bash -s legacy
 elif [ "${MODE}" == 'susfs' ]; then
-    curl -LSs "https://raw.githubusercontent.com/sidex15/KernelSU-Next/legacy-susfs/kernel/setup.sh" | bash -s legacy-susfs
+    curl -LSs "https://raw.githubusercontent.com/GoRhanHee/KernelSU-Next/legacy-susfs/kernel/setup.sh" | bash -s legacy-susfs
 fi
 
 # Define specific variables
