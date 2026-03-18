@@ -113,7 +113,7 @@ ARCH=arm64 \
 O=out
 "
 
-DEFCONFIG="exynos9820-${DEVICE}_defconfig ${SOC}.config droidspaces.config"
+DEFCONFIG="exynos9820-${DEVICE}_defconfig ${SOC}.config"
 
 if [ "${MODE}" == "ksun" ]; then
     CONFIGS="${DEFCONFIG} kernelsu.config"
